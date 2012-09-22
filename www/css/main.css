@@ -1,0 +1,19 @@
+label {
+	font-size: 1.1em;
+}
+
+.tenant-row {
+	margin-bottom: 1em;
+}
+
+.tenant-name {
+	margin-bottom: 0.5em;
+}
+
+.table-centered {
+	margin: 0 auto;
+}
+
+.date-field {
+	width: 90px;
+}
