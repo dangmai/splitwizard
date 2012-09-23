@@ -1,0 +1,15 @@
+<ul>
+{{#people}}
+	<li>
+		{{name}} owes: {{total}}
+		<ul>
+		{{#owes}}
+			<li>{{amount}} for {{bill.for}} between {{bill.start}} and {{bill.end}}</li>
+		{{/owes}}
+		{{^owes}}
+		Nothing
+		{{/owes}}
+		</ul>
+	</li>
+{{/people}}
+</ul>
