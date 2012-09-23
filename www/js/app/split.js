@@ -1,7 +1,7 @@
 (function () {
 	'use strict';
 
-	define(['jquery', 'moment-range', 'sylvester'], function ($, moment, sylvester){
+	define(['underscore', 'jquery', 'moment-range', 'sylvester'], function (_, $, moment, sylvester){
 		var dateFormat = "YYYY-MM-DD";
 		
 		// Checks that an input string is a decimal number, with an optional +/- sign character.
@@ -10,7 +10,6 @@
 		   return String(s).search (isDecimal_re) != -1
 		}
 
-		
 		/**
 		 * A class to represent a day in the billing cycle of a particular bill.
 		 * @param (moment) date the date of this day.
@@ -19,91 +18,113 @@
 		function Day(date, billIndex) {
 			this.date = date;
 			this.billIndex = billIndex;
-			this.tenants = [];
+			this.people = [];
 		}
 		Day.prototype.toString = function() {
 			return this.date.toString();
 		}
 		/**
-		 * Add a tenant who is present on this day.
-		 * @param (object) tenant the tenant object.
+		 * Add a person who is present on this day.
+		 * @param (object) person the person object.
 		 */
-		Day.prototype.addTenant = function(tenant) {
-			this.tenants.push(tenant);
-			if (typeof(tenant['owes'][this.billIndex]==="undefined")) {
-				tenant['owes'][this.billIndex] = 0;
+		Day.prototype.addPerson = function(person) {
+			this.people.push(person);
+			if (typeof(person['owes'][this.billIndex]==="undefined")) {
+				person['owes'][this.billIndex] = 0;
 			}
 		}
 		/**
 		 * Announces to this object how much it is worth in the billing
 		 * cycle. Calling this automatically distribute this amount of
-		 * money evenly towards the tenants who are present on this day.
+		 * money evenly towards the people who are present on this day.
 		 * @param moneyAmt how much this day is worth in the billing cycle.
 		 */
 		Day.prototype.worths = function(moneyAmt) {
-			var eachTenantOwes = moneyAmt / this.tenants.length;
+			var eachPersonOwes = moneyAmt / this.people.length;
 			var that = this;
 			
-			$.each(this.tenants, function(index, tenant) {
-				tenant['owes'][that.billIndex] += eachTenantOwes;
+			$.each(this.people, function(index, person) {
+				person['owes'][that.billIndex] += eachPersonOwes;
 			});
 		}
 		/**
-		 * Helper method to get the number of present tenants on this day.
-		 * @return (int) the number of present tenants.
+		 * Helper method to get the number of present people on this day.
+		 * @return (int) the number of present people.
 		 */
-		Day.prototype.numTenants = function() {
-			return this.tenants.length;
+		Day.prototype.numPeople = function() {
+			return this.people.length;
 		}
 		
 		/**
-		 * Calculate the bill(s) for the tenants.
+		 * Calculate the bill(s) for the people.
 		 * @param (List) bills a list of bills to calculate.
-		 * @param (List) tenants a list of tenants to split the bill to.
-		 * @return (List) the original list of tenants, each of which has his/her "owes" property
+		 * @param (List) people a list of people to split the bill to.
+		 * @return (List) the original list of people, each of which has his/her "owes" property
 		 * populated with an array containing the amount of money he/she owes for the bills.
 		 */
-		var calculate = function(bills, tenants) {
+		var calculate = function(bills, people) {
+			// Clone the original lists, so they are not modified by mistake. Also, necessary attributes
+			// that are necessary for calculations later on are added in this step.
+			// Note: Underscore clone() is shallow, so it is necessary to loop over each item in the
+			// original lists and clone it.
+			var results = [];
+			$.each(people, function (i, person) {
+				var tempPerson = _.clone(person);
+				// moment-range contains() is not inclusive on both ends, so some black magic is required here.
+				tempPerson["range"] = moment().range(moment(tempPerson["in"]).subtract("d", 1), moment(tempPerson["out"]).add("d", 1));
+				tempPerson["owes"] = [];
+				results.push(tempPerson);
+			});
+			var billsOutput = [];
+			$.each(bills, function (i, bill) {
+				billsOutput.push(_.clone(bill));
+			});
+			$.each(billsOutput, function (billIndex, bill) {
+				bill['start'] = bill['start'].format(dateFormat);
+				bill['end'] = bill['end'].format(dateFormat);
+			});
+
+			// Start the calculations!
 			$.each(bills, function(billIndex, bill) {
-				// In order to calculate the amount of money each tenant owes, it is necessary to
+				// In order to calculate the amount of money each person owes, it is necessary to
 				// figure out how many days he/she is in the apt during the cycle. Also, it is 
 				// assumed that everyone uses the same amount of utility in 1 day. With that 
 				// assumption, we can build a matrix to solve a system of linear equations, in
-				// which the variables are how much each day with an unique number of tenants is worth.
-				// Then, we can simply divide those amounts to the tenants that are present in each
+				// which the variables are how much each day with an unique number of people is worth.
+				// Then, we can simply divide those amounts to the people that are present in each
 				// day to find the amount that everyone owes.
 				// Be careful, all moments are mutable!
 				var	iterationStep = moment().range(bill['start'], moment(bill['start']).add('days', 1)),
 					range = moment().range(bill['start'], bill['end']),
-					uniqueDays = {}, // Data structure that groups the days with similar # of tenants together
+					uniqueDays = {}, // Data structure that groups the days with similar # of people together
 					numColumns = 0,
-					tenantCount, day;
+					personCount, day;
 				
-				// First step: determine how many tenants are there in each day, and put it in some
-				// data structure. We need to group the days with the same number of tenants into 
+				// First step: determine how many people are there in each day, and put it in some
+				// data structure. We need to group the days with the same number of people into 
 				// one category, in order to build the matrix later on. For this matrix, number of 
 				// columns = number of unique days. Also, we keep track of the keys added to the
 				// data structure using the hash "keys". This is because it's hard to traverse/count
 				// the attributes in Javascript, so it's better to just manually keep track of them
 				// when constructing the data structure.
 				range.by(iterationStep, function(currentDay) {
-					tenantCount = 0;
+					personCount = 0;
 					day = new Day(currentDay, billIndex);
-					$.each(tenants, function(index, tenant) {
-						if (tenant["range"].contains(currentDay)) {
-							tenantCount ++;
-							day.addTenant(tenant);
+					$.each(results, function(index, person) {
+						if (person["range"].contains(currentDay)) {
+							personCount ++;
+							day.addPerson(person);
 						};
 					});
 					if (!('keys' in uniqueDays)) {
 						uniqueDays['keys'] = [];
 					}
-					if (!(tenantCount in uniqueDays)) {
-						uniqueDays[tenantCount] = [];
-						uniqueDays['keys'].push(tenantCount.toString());
+					if (!(personCount in uniqueDays)) {
+						uniqueDays[personCount] = [];
+						uniqueDays['keys'].push(personCount.toString());
 						numColumns ++;
 					}
-					uniqueDays[tenantCount].push(day);
+					uniqueDays[personCount].push(day);
 				});
 				
 				// Start building the matrix. 
@@ -121,14 +142,14 @@
 				// Now, we use the first unique category as the anchor, and calculate the
 				// relationship between the rest with respect to the anchor. We then add
 				// this relationship to the necessary row in the matrix.
-				var anchorDayNumTenants = uniqueDays[uniqueDays['keys'][0]][0].numTenants(),
-					uniqueDayNumTenants, currentRow;
+				var anchorDayNumPeople = uniqueDays[uniqueDays['keys'][0]][0].numPeople(),
+					uniqueDayNumPeople, currentRow;
 				for (var i=1; i < numColumns; i ++) {
-					uniqueDayNumTenants = uniqueDays[uniqueDays['keys'][i]][0].numTenants();
-					currentRow = [uniqueDayNumTenants];
+					uniqueDayNumPeople = uniqueDays[uniqueDays['keys'][i]][0].numPeople();
+					currentRow = [uniqueDayNumPeople];
 					for (var j=1; j < numColumns; j ++) {
 						if (i===j) {
-							currentRow.push(0 - anchorDayNumTenants);
+							currentRow.push(0 - anchorDayNumPeople);
 						} else {
 							currentRow.push(0);
 						}
@@ -145,20 +166,40 @@
 				
 				// Making the matrix and the result arrays into actual matrices.
 				var matrix = $M(matrixArray),
-					result = $V(resultArray);
-				console.log(matrix);
-				console.log(result);
-				var solution = matrix.inv().x(result);
-				console.log(solution);
+					result = $V(resultArray),
+					solution = matrix.inv().x(result);
 				
+				// The solution matrix has the amount of money that each day is worth for this bill,
+				// so attribute those amounts to the correct days.
 				$.each(solution.elements, function(index, value) {
 					$.each(uniqueDays[uniqueDays['keys'][index]], function(i, day) {
 						day.worths(value);
 					});
 				});
+				
+				// In order to to make it easier for output, each person in the results list will
+				// also have a 'total' attribute that is the sum of all the amount they owe in
+				// every bill.
+				$.each(results, function(index, person) {
+					person['total'] = (_.reduce(person['owes'], function(memo, num) { 
+						return memo + num; 
+					})).toFixed(2);
+				});
 			});
-			console.log(tenants);
 			
+			// In order for easier output, the "owes" attribute for each person is manipulated so that
+			// it contains the whole Bill object as well.
+			$.each(results, function(index, person) {
+				person["owesOld"] = person["owes"];
+				person["owes"] = [];
+				$.each(person["owesOld"], function(billIndex, value) {
+					person["owes"].push({ "bill": billsOutput[billIndex], "amount": value.toFixed(2) });
+				});
+				delete person["owesOld"];
+			});
+		
+			//console.log(results);
+			return results;
 		};
 		
 		/**
@@ -216,36 +257,33 @@
 		}
 		
 		/**
-		 * Method to revive the tenants from a JSON object.
+		 * Method to revive the people from a JSON object.
 		 * @param k key
 		 * @param v value
 		 */
-		var tenantReviver = function(k, v) {
+		var peopleReviver = function(k, v) {
 			if (k === "in" || k === "out" && v) {
 				return moment(v, dateFormat);
 			}
 			else if (v.hasOwnProperty("name")) {
-				// The whole tenant object here
+				// The whole person object here
 				if (!v.hasOwnProperty("in")) {
 					v["in"] = moment("1970-01-01", dateFormat);
 				}
 				if (!v.hasOwnProperty("out")) {
 					v["out"] = moment("3000-01-01", dateFormat);
 				}
-				// moment-range contains() is not inclusive on both ends, so some black magic is required here.
-				v["range"] = moment().range(moment(v["in"]).subtract("d", 1), moment(v["out"]).add("d", 1));
-				v["owes"] = [];
 				return v;
 			}
 			return v;
 		}
 		
 		/**
-		 * Helper Method to dump the tenants into a JSON object
+		 * Helper Method to dump the people into a JSON object
 		 * @param k key
 		 * @param v value
 		 */
-		var tenantReplacer = function(k, v) {
+		var peopleReplacer = function(k, v) {
 			var result = v;
 			if (k === "owes" || k === "range") {
 				return;
@@ -274,9 +312,9 @@
 		return {
 			calculate: calculate,
 			billReviver: billReviver,
-			tenantReviver: tenantReviver,
+			peopleReviver: peopleReviver,
 			billReplacer: billReplacer,
-			tenantReplacer: tenantReplacer,
+			peopleReplacer: peopleReplacer,
 			billValidator: billValidator,
 			peopleValidator: peopleValidator,
 		};

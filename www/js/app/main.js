@@ -2,21 +2,14 @@
 	'use strict';
 
 	define(function (require) {
-		var billsJson = require('text!app/bills0809.json'),
-			tenantsJson = require('text!app/tenants.json'),
-			Mustache = require('mustache'),
+		var Mustache = require('mustache'),
 			formTemplateSrc = require('text!app/templates/form.html'),
 			billRowSrc = require('text!app/templates/bill-row.html'),
-			peopleRowSrc = require('text!app/templates/tenant-row.html'),
+			peopleRowSrc = require('text!app/templates/person-row.html'),
+			resultSrc = require('text!app/templates/result.html'),
 			$ = require('jquery'),
-			split = require('app/split');
-			//bills = JSON.parse(billsJson, split.billReviver),
-			//tenants = JSON.parse(tenantsJson, split.tenantReviver),
-			//b = JSON.stringify(bills, split.billReplacer),
-			//t = JSON.stringify(tenants, split.tenantReplacer);
-		//tenants = split.calculate(bills, tenants);
-		
-		var	peopleCount = 0,
+			split = require('app/split'),
+			peopleCount = 0,
 			billCount = 0,
 			removable = function(count) {
 				return !(count === 1);
@@ -46,14 +39,14 @@
 		});
 		$('#calculate').click(function(e) { 
 			e.preventDefault();
-			var tenantsJson = [];
+			var peopleJson = [];
 			var billsJson = [];
 			$.each($('.main-form tr[id^=person]'), function(index, el) {
 				var name = $(el).find('.name').val(),
 					inDate = $(el).find('.in').val(),
 					outDate = $(el).find('.out').val();
 				if (split.peopleValidator(name, inDate, outDate) === true) {
-					tenantsJson.push({"name": name, "in": inDate, "out": outDate});
+					peopleJson.push({"name": name, "in": inDate, "out": outDate});
 				}
 			});
 			$.each($('.main-form tr[id^=bill]'), function(index, el) {
@@ -66,14 +59,16 @@
 				}
 			});
 			var bills = JSON.parse(JSON.stringify(billsJson), split.billReviver);
-			var tenants = JSON.parse(JSON.stringify(tenantsJson), split.tenantReviver);
-			split.calculate(bills, tenants);
-		});
+			var people = JSON.parse(JSON.stringify(peopleJson), split.peopleReviver);
+			var results = split.calculate(bills, people);
+			$('.result').html(Mustache.render(resultSrc, { "people": results }));
+		});		
 		
-		$('#more-people').trigger("click", {"name": "DangMai", "in": "2012-08-05", "out": "2012-09-05"});
+		$('#more-people').trigger("click", {"name": "Dang Mai", "in": "2012-08-05", "out": "2012-09-05"});
 		$('#more-people').trigger("click",{"name": "Saqib", "in": "2012-08-05", "out": "2012-09-05"});
 		
 		$('#more-bills').trigger("click",{"for":"Electricity", "total": 30, "start": "2012-08-06", "end": "2012-09-03"});
+		$('#more-bills').trigger("click",{"for":"Internet", "total": 60, "start": "2012-08-06", "end": "2012-09-03"});
 		//$('#more-bills').trigger("click",{});
 	});
 }());
