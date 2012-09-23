@@ -4,6 +4,13 @@
 	define(['jquery', 'moment-range', 'sylvester'], function ($, moment, sylvester){
 		var dateFormat = "YYYY-MM-DD";
 		
+		// Checks that an input string is a decimal number, with an optional +/- sign character.
+		var isDecimal_re     = /^\s*(\+|-)?((\d+(\.\d+)?)|(\.\d+))\s*$/;
+		function isDecimal(s) {
+		   return String(s).search (isDecimal_re) != -1
+		}
+
+		
 		/**
 		 * A class to represent a day in the billing cycle of a particular bill.
 		 * @param (moment) date the date of this day.
@@ -167,6 +174,48 @@
 		};
 		
 		/**
+		 * Method to validate whether the input for a bill is valid or not.
+		 *
+		 * @param (String) what is this bill about?
+		 * @param (String) total the total amount of money due in this bill.
+		 * @param (String) the start date of the billing cycle.
+		 * @param (String) the end date of the billing cycle.
+		 * @return undefined if there's no error, otherwise returns a hashtable containing the error(s).
+		 */
+		var billValidator = function(forStr, total, start, end) {
+			if (!isDecimal(total)) {
+			
+			}
+			var startMoment = moment(start, dateFormat),
+				endMoment = moment(end, dateFormat);
+			if (!startMoment.isValid()) {
+			
+			}
+			if (!endMoment.isValid()) {
+			
+			}
+			if (startMoment.diff(endMoment) > 0) {
+			
+			}
+			return true;
+		}
+		
+		var peopleValidator = function(name, inDate, outDate) {
+			var inMoment = moment(inDate, dateFormat),
+				outMoment = moment(outDate, dateFormat);
+			if (!inMoment.isValid()) {
+			
+			}
+			if (!outMoment.isValid()) {
+			
+			}
+			if (inMoment.diff(outMoment) > 0) {
+			
+			}
+			return true;
+		}
+		
+		/**
 		 * Method to revive the tenants from a JSON object.
 		 * @param k key
 		 * @param v value
@@ -228,6 +277,8 @@
 			tenantReviver: tenantReviver,
 			billReplacer: billReplacer,
 			tenantReplacer: tenantReplacer,
+			billValidator: billValidator,
+			peopleValidator: peopleValidator,
 		};
 	});
 } ());

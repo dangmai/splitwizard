@@ -52,14 +52,18 @@
 				var name = $(el).find('.name').val(),
 					inDate = $(el).find('.in').val(),
 					outDate = $(el).find('.out').val();
-				tenantsJson.push({"name": name, "in": inDate, "out": outDate});
+				if (split.peopleValidator(name, inDate, outDate) === true) {
+					tenantsJson.push({"name": name, "in": inDate, "out": outDate});
+				}
 			});
 			$.each($('.main-form tr[id^=bill]'), function(index, el) {
 				var forVal = $(el).find('.for').val(),
 					start = $(el).find('.start').val(),
 					end = $(el).find('.end').val(),
 					total = parseFloat($(el).find('.total').val());
-				billsJson.push({"for": forVal, "start": start, "end": end, "total": total});
+				if (split.billValidator(forVal, total, start, end) === true) {
+					billsJson.push({"for": forVal, "start": start, "end": end, "total": total});
+				}
 			});
 			var bills = JSON.parse(JSON.stringify(billsJson), split.billReviver);
 			var tenants = JSON.parse(JSON.stringify(tenantsJson), split.tenantReviver);
