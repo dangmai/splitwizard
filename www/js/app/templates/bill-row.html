@@ -1,7 +1,31 @@
 <tr id="bill{{billId}}">
-	<td><input type="text" class="span3 for" value="{{for}}"></td>
-	<td><input type="text" class="span1 total" value="{{total}}"></td>
-	<td><input type="text" class="date-field start" value="{{start}}"></td>
-	<td><input type="text" class="date-field end" value="{{end}}"></td>	
+	<td>
+		<div class="control-group">
+			<div class="controls">
+				<input type="text" class="span3 required" name="for{{billId}}" value="{{for}}">
+			</div>
+		</div>
+	</td>
+	<td>
+		<div class="control-group">
+			<div class="controls">
+				<input type="text" class="span1 required number" name="total{{billId}}" value="{{total}}">
+			</div>
+		</div>
+	</td>
+	<td>
+		<div class="control-group">
+			<div class="controls">
+				<input type="text" class="date-field moment required" name="start{{billId}}" id="start{{billId}}" value="{{start}}">
+			</div>
+		</div>
+	</td>
+	<td>
+		<div class="control-group">
+			<div class="controls">
+				<input type="text" class="date-field moment required" name="end{{billId}}" laterthan="#start{{billId}}" value="{{end}}">
+			</div>
+		</div>
+	</td>
 	{{#removable}}<td><a class="remove" href="#">Remove</a>{{/removable}}
 </tr>

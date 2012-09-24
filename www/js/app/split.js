@@ -2,7 +2,7 @@
 	'use strict';
 
 	define(['underscore', 'jquery', 'moment-range', 'sylvester'], function (_, $, moment, sylvester){
-		var dateFormat = "YYYY-MM-DD";
+		var dateFormat = "MMM DD, YYYY";
 		
 		// Checks that an input string is a decimal number, with an optional +/- sign character.
 		var isDecimal_re     = /^\s*(\+|-)?((\d+(\.\d+)?)|(\.\d+))\s*$/;
@@ -29,9 +29,6 @@
 		 */
 		Day.prototype.addPerson = function(person) {
 			this.people.push(person);
-			if (typeof(person['owes'][this.billIndex]==="undefined")) {
-				person['owes'][this.billIndex] = 0;
-			}
 		}
 		/**
 		 * Announces to this object how much it is worth in the billing
@@ -100,6 +97,9 @@
 					numColumns = 0,
 					personCount, day;
 				
+				$.each(results, function(i, person) {
+					person['owes'][billIndex] = 0;
+				});
 				// First step: determine how many people are there in each day, and put it in some
 				// data structure. We need to group the days with the same number of people into 
 				// one category, in order to build the matrix later on. For this matrix, number of 
@@ -208,75 +208,49 @@
 		 * @param v value
 		 */
 		var billReviver = function(k, v) {
-			if (k === "start" || k === "end") {
-				return moment(v, dateFormat);
+			if (v.hasOwnProperty("start") && v.hasOwnProperty("end")) {
+				return billify(v);
 			}
 			return v;
 		};
 		
-		/**
-		 * Method to validate whether the input for a bill is valid or not.
-		 *
-		 * @param (String) what is this bill about?
-		 * @param (String) total the total amount of money due in this bill.
-		 * @param (String) the start date of the billing cycle.
-		 * @param (String) the end date of the billing cycle.
-		 * @return undefined if there's no error, otherwise returns a hashtable containing the error(s).
-		 */
-		var billValidator = function(forStr, total, start, end) {
-			if (!isDecimal(total)) {
-			
-			}
-			var startMoment = moment(start, dateFormat),
-				endMoment = moment(end, dateFormat);
-			if (!startMoment.isValid()) {
-			
-			}
-			if (!endMoment.isValid()) {
-			
-			}
-			if (startMoment.diff(endMoment) > 0) {
-			
-			}
-			return true;
+		var billify = function(naiveObj) {
+			var bill = _.clone(naiveObj);
+			bill["start"] = moment(bill["start"], dateFormat);
+			bill["end"] = moment(bill["end"], dateFormat);
+			return bill;
 		}
 		
-		var peopleValidator = function(name, inDate, outDate) {
-			var inMoment = moment(inDate, dateFormat),
-				outMoment = moment(outDate, dateFormat);
-			if (!inMoment.isValid()) {
-			
-			}
-			if (!outMoment.isValid()) {
-			
-			}
-			if (inMoment.diff(outMoment) > 0) {
-			
-			}
-			return true;
-		}
-		
+		var validateDate = function(dateStr) {
+			return moment(dateStr).isValid();
+		};
+				
 		/**
 		 * Method to revive the people from a JSON object.
 		 * @param k key
 		 * @param v value
 		 */
 		var peopleReviver = function(k, v) {
-			if (k === "in" || k === "out" && v) {
-				return moment(v, dateFormat);
-			}
-			else if (v.hasOwnProperty("name")) {
-				// The whole person object here
-				if (!v.hasOwnProperty("in")) {
-					v["in"] = moment("1970-01-01", dateFormat);
-				}
-				if (!v.hasOwnProperty("out")) {
-					v["out"] = moment("3000-01-01", dateFormat);
-				}
-				return v;
+			if (v.hasOwnProperty("name")) {
+				return personify(v);
 			}
 			return v;
-		}
+		};
+		
+		var personify = function(naiveObj) {
+			var person = _.clone(naiveObj);
+			if (!person.hasOwnProperty("in") || !person["in"]) {
+				person["in"] = moment("Jan 01, 1970", dateFormat);
+			} else {
+				person["in"] = moment(person["in"], dateFormat);
+			}
+			if (!person.hasOwnProperty("out") || !person["out"]) {
+				person["out"] = moment("Dec 31, 3000", dateFormat);
+			} else {
+				person["out"] = moment(person["out"], dateFormat);
+			}
+			return person;
+		};
 		
 		/**
 		 * Helper Method to dump the people into a JSON object
@@ -291,7 +265,7 @@
 			if (k === "in" || k === "out") {
 				result = result.format(dateFormat);
 			}
-			if (result === "3000-01-01" || result == "1970-01-01") {
+			if (result === "Dec 31, 3000" || result == "Jan 01, 1970") {
 				return;
 			}
 			return result;
@@ -315,8 +289,9 @@
 			peopleReviver: peopleReviver,
 			billReplacer: billReplacer,
 			peopleReplacer: peopleReplacer,
-			billValidator: billValidator,
-			peopleValidator: peopleValidator,
+			billify: billify,
+			personify: personify,
+			validateDate: validateDate,
 		};
 	});
 } ());

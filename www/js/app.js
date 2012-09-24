@@ -6,9 +6,13 @@
 requirejs.config({
     baseUrl: 'js/lib',
     paths: {
-        app: '../app'
+        app: '../app',
+		"bootstrap-datepicker": 'bootstrap-datepicker/js/bootstrap-datepicker',
     },
-	urlArgs: "bust=" +  (new Date()).getTime()
+	urlArgs: "bust=" +  (new Date()).getTime(),
+	shim: {
+		'bootstrap-datepicker': ['jquery']
+	}
 });
 
 // Start loading the main app file. Put all of

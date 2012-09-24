@@ -1,6 +1,24 @@
 <tr id="person{{peopleId}}">
-	<td><input type="text" class="span4 name" value="{{name}}"></td>
-	<td><input type="text" class="date-field in" value="{{in}}"></td>
-	<td><input type="text" class="date-field out" value="{{out}}"></td>	
+	<td>
+		<div class="control-group">
+			<div class="controls">
+				<input type="text" class="span4 name required" id="name{{peopleId}}" name="name{{peopleId}}" value="{{name}}">
+			</div>
+		</div>
+	</td>
+	<td>
+		<div class="control-group">
+			<div class="controls">
+				<input type="text" class="date-field moment" id="in{{peopleId}}" name="in{{peopleId}}" value="{{in}}">
+			</div>
+		</div>
+	</td>
+	<td>
+		<div class="control-group">
+			<div class="controls">
+				<input type="text" class="date-field moment" id="out{{peopleId}}" name="out{{peopleId}}" laterthan="#in{{peopleId}}" value="{{out}}">
+			</div>
+		</div>
+	</td>
 	{{#removable}}<td><a class="remove" href="#">Remove</a></td>{{/removable}}
 </tr>
