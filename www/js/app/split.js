@@ -3,12 +3,6 @@
 
 	define(['underscore', 'jquery', 'moment-range', 'sylvester'], function (_, $, moment, sylvester){
 		var dateFormat = "MMM DD, YYYY";
-		
-		// Checks that an input string is a decimal number, with an optional +/- sign character.
-		var isDecimal_re     = /^\s*(\+|-)?((\d+(\.\d+)?)|(\.\d+))\s*$/;
-		function isDecimal(s) {
-		   return String(s).search (isDecimal_re) != -1
-		}
 
 		/**
 		 * A class to represent a day in the billing cycle of a particular bill.
@@ -214,6 +208,12 @@
 			return v;
 		};
 		
+		/**
+		 * Objectify a naive bill object into one that can be more easily
+		 * processed later on.
+		 * @param (Object) naiveObj the original naive object.
+		 * @return (Object) the finished object.
+		 */
 		var billify = function(naiveObj) {
 			var bill = _.clone(naiveObj);
 			bill["start"] = moment(bill["start"], dateFormat);
@@ -221,6 +221,11 @@
 			return bill;
 		}
 		
+		/**
+		 * Helper method to validate a date string.
+		 * @param dateStr the date string to validate.
+		 * @return whether the date string is a valid date.
+		 */
 		var validateDate = function(dateStr) {
 			return moment(dateStr).isValid();
 		};
@@ -237,6 +242,12 @@
 			return v;
 		};
 		
+		/**
+		 * Objectify a naive person object so that it can be more easily used
+		 * later on.
+		 * @param (Object) naiveObj the naive person object.
+		 * @return (Object) the finish person object.
+		 */
 		var personify = function(naiveObj) {
 			var person = _.clone(naiveObj);
 			if (!person.hasOwnProperty("in") || !person["in"]) {

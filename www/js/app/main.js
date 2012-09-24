@@ -26,7 +26,6 @@
 		 * Start the calculations!
 		 */
 		var calculate = function() {
-			console.log("Calculate called");
 			var people = [];
 			var bills = [];
 			$.each($('#main-form tr[id^=person]'), function(index, el) {
