@@ -45,7 +45,7 @@
 				$('.result').html(Mustache.render(resultSrc, { "people": results }));
 			};
 
-			// Validationa on the form
+			// Validations on the form
 			$.validator.addMethod("moment", function (value, element) {
 				return this.optional(element) || util.validateDate(value);
 			}, "Not a date");
