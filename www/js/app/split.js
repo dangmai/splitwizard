@@ -86,6 +86,15 @@
 								day.addPerson(person);
 							}
 						});
+						if (personCount === 0) {
+							// Without this check, days with 0 people may
+							// lead to a situation where the matrix cannot be
+							// inversed and a solution can't be found. Doing
+							// this assumes that whoever pays this bill needs
+							// to pay for the day(s) that no one is present as
+							// well.
+							return;
+						}
 						if (!(uniqueDays.hasOwnProperty('keys'))) {
 							uniqueDays.keys = [];
 						}
