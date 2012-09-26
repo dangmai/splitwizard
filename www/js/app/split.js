@@ -2,9 +2,8 @@
 (function () {
 	'use strict';
 
-	define(['app/model', 'app/util', 'underscore', 'jquery', 'moment-range',
-		'sylvester'],
-		function (model, util, _, $, moment, sylvester) {
+	define(['app/model', 'app/util', 'underscore', 'moment-range', 'sylvester'],
+		function (model, util, _, moment, sylvester) {
 			var calculate,
 				billReviver,
 				billReplacer,
@@ -28,23 +27,23 @@
 				// loop over each item in the original lists and clone it.
 				var results = [],
 					billsOutput = [];
-				$.each(people, function (i, person) {
+				_.each(people, function (person, i) {
 					var tempPerson = person.clone();
 					// moment-range contains() is not inclusive on both ends, so some black magic is required here.
 					tempPerson.range = moment().range(moment(tempPerson["in"]).subtract("d", 1), moment(tempPerson.out).add("d", 1));
 					tempPerson.owes = [];
 					results.push(tempPerson);
 				});
-				$.each(bills, function (i, bill) {
+				_.each(bills, function (bill, i) {
 					billsOutput.push(bill.clone());
 				});
-				$.each(billsOutput, function (billIndex, bill) {
+				_.each(billsOutput, function (bill, billIndex) {
 					bill.start = bill.start.format(util.dateFormat);
 					bill.end = bill.end.format(util.dateFormat);
 				});
 
 				// Start the calculations!
-				$.each(bills, function (billIndex, bill) {
+				_.each(bills, function (bill, billIndex) {
 					// In order to calculate the amount of money each person owes, it is necessary to
 					// figure out how many days he/she is in the apt during the cycle. Also, it is 
 					// assumed that everyone uses the same amount of utility in 1 day. With that 
@@ -73,7 +72,7 @@
 						resultVector,
 						solution;
 
-					$.each(results, function (i, person) {
+					_.each(results, function (person, i) {
 						person.owes[billIndex] = 0;
 					});
 					// First step: determine how many people are there in each day, and put it in some
@@ -86,7 +85,7 @@
 					range.by(iterationStep, function (currentDay) {
 						personCount = 0;
 						day = new model.Day(currentDay, billIndex);
-						$.each(results, function (index, person) {
+						_.each(results, function (person) {
 							if (person.range.contains(currentDay)) {
 								personCount += 1;
 								day.addPerson(person);
@@ -109,7 +108,7 @@
 					resultArray = [];
 					// The first row shows the relative weights given to each unique
 					// day.
-					$.each(uniqueDays.keys, function (index, key) {
+					_.each(uniqueDays.keys, function (key) {
 						currentRow.push(uniqueDays[key].length);
 					});
 					matrixArray.push(currentRow);
@@ -146,8 +145,8 @@
 
 					// The solution matrix has the amount of money that each day is worth for this bill,
 					// so attribute those amounts to the correct days.
-					$.each(solution.elements, function (index, value) {
-						$.each(uniqueDays[uniqueDays.keys[index]], function (i, day) {
+					_.each(solution.elements, function (value, index) {
+						_.each(uniqueDays[uniqueDays.keys[index]], function (day) {
 							day.worths(value);
 						});
 					});
@@ -155,7 +154,7 @@
 					// In order to to make it easier for output, each person in the results list will
 					// also have a 'total' attribute that is the sum of all the amount they owe in
 					// every bill.
-					$.each(results, function (index, person) {
+					_.each(results, function (person) {
 						person.total = (_.reduce(person.owes, function (memo, num) {
 							return memo + num;
 						})).toFixed(2);
@@ -164,10 +163,10 @@
 
 				// In order for easier output, the "owes" attribute for each person is manipulated so that
 				// it contains the whole Bill object as well.
-				$.each(results, function (index, person) {
+				_.each(results, function (person) {
 					person.owesOld = person.owes;
 					person.owes = [];
-					$.each(person.owesOld, function (billIndex, value) {
+					_.each(person.owesOld, function (value, billIndex) {
 						person.owes.push({
 							"bill": billsOutput[billIndex],
 							"amount": value.toFixed(2)
