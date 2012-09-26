@@ -20,7 +20,7 @@
              * @param k key
              * @param v value
              */
-            billReviver: function (k, v) {
+            billsReviver: function (k, v) {
                 if (v.hasOwnProperty("start") && v.hasOwnProperty("end")) {
                     return new model.Bill(v['for'], v.total, v.start, v.end);
                 }
@@ -63,7 +63,7 @@
              * @param k key
              * @param v value
              */
-            billReplacer: function (k, v) {
+            billsReplacer: function (k, v) {
                 if (k === "start" || k === "end") {
                     return v.format(this.dateFormat);
                 }
