@@ -2,62 +2,15 @@
 (function () {
 	'use strict';
 
-	define(['underscore', 'jquery', 'moment-range', 'sylvester'],
-		function (_, $, moment, sylvester) {
-			var dateFormat = "MMM DD, YYYY",
-				calculate,
+	define(['app/model', 'app/util', 'underscore', 'jquery', 'moment-range',
+		'sylvester'],
+		function (model, util, _, $, moment, sylvester) {
+			var calculate,
 				billReviver,
-				billify,
 				billReplacer,
 				peopleReviver,
 				peopleReplacer,
-				personify,
 				validateDate;
-
-			/**
-	         * A class to represent a day in the billing cycle of a particular bill.
-	         * @param (moment) date the date of this day.
-	         * @param (int) billIndex the index of this bill in the bills array.
-	         */
-	        function Day(date, billIndex) {
-	            this.date = date;
-	            this.billIndex = billIndex;
-	            this.people = [];
-	        }
-
-	        Day.prototype.toString = function () {
-	            return this.date.toString();
-	        };
-
-	        /**
-	         * Add a person who is present on this day.
-	         * @param (object) person the person object.
-	         */
-	        Day.prototype.addPerson = function (person) {
-	            this.people.push(person);
-	        };
-
-	        /**
-	         * Announces to this object how much it is worth in the billing
-	         * cycle. Calling this automatically distribute this amount of
-	         * money evenly towards the people who are present on this day.
-	         * @param moneyAmt how much this day is worth in the billing cycle.
-	         */
-	        Day.prototype.worths = function (moneyAmt) {
-	            var eachPersonOwes = moneyAmt / this.people.length,
-	                that = this;
-	            $.each(this.people, function (index, person) {
-	                person.owes[that.billIndex] += eachPersonOwes;
-	            });
-	        };
-
-	        /**
-	         * Helper method to get the number of present people on this day.
-	         * @return (int) the number of present people.
-	         */
-	        Day.prototype.numPeople = function () {
-	            return this.people.length;
-	        };
 
 			/**
 			 * Calculate the bill(s) for the people.
@@ -76,18 +29,18 @@
 				var results = [],
 					billsOutput = [];
 				$.each(people, function (i, person) {
-					var tempPerson = _.clone(person);
+					var tempPerson = person.clone();
 					// moment-range contains() is not inclusive on both ends, so some black magic is required here.
 					tempPerson.range = moment().range(moment(tempPerson["in"]).subtract("d", 1), moment(tempPerson.out).add("d", 1));
 					tempPerson.owes = [];
 					results.push(tempPerson);
 				});
 				$.each(bills, function (i, bill) {
-					billsOutput.push(_.clone(bill));
+					billsOutput.push(bill.clone());
 				});
 				$.each(billsOutput, function (billIndex, bill) {
-					bill.start = bill.start.format(dateFormat);
-					bill.end = bill.end.format(dateFormat);
+					bill.start = bill.start.format(util.dateFormat);
+					bill.end = bill.end.format(util.dateFormat);
 				});
 
 				// Start the calculations!
@@ -132,7 +85,7 @@
 					// when constructing the data structure.
 					range.by(iterationStep, function (currentDay) {
 						personCount = 0;
-						day = new Day(currentDay, billIndex);
+						day = new model.Day(currentDay, billIndex);
 						$.each(results, function (index, person) {
 							if (person.range.contains(currentDay)) {
 								personCount += 1;
@@ -234,22 +187,9 @@
 			 */
 			billReviver = function (k, v) {
 				if (v.hasOwnProperty("start") && v.hasOwnProperty("end")) {
-					return billify(v);
+					return new model.Bill(v['for'], v.total, v.start, v.end);
 				}
 				return v;
-			};
-
-			/**
-			 * Objectify a naive bill object into one that can be more easily
-			 * processed later on.
-			 * @param (Object) naiveObj the original naive object.
-			 * @return (Object) the finished object.
-			 */
-			billify = function (naiveObj) {
-				var bill = _.clone(naiveObj);
-				bill.start = moment(bill.start, dateFormat);
-				bill.end = moment(bill.end, dateFormat);
-				return bill;
 			};
 
 			/**
@@ -268,30 +208,9 @@
 			 */
 			peopleReviver = function (k, v) {
 				if (v.hasOwnProperty("name")) {
-					return personify(v);
+					return new model.Person(v.name, v['in'], v.out);
 				}
 				return v;
-			};
-
-			/**
-			 * Objectify a naive person object so that it can be more easily used
-			 * later on.
-			 * @param (Object) naiveObj the naive person object.
-			 * @return (Object) the finish person object.
-			 */
-			personify = function (naiveObj) {
-				var person = _.clone(naiveObj);
-				if (!person.hasOwnProperty("in") || !person["in"]) {
-					person["in"] = moment("Jan 01, 1970", dateFormat);
-				} else {
-					person["in"] = moment(person["in"], dateFormat);
-				}
-				if (!person.hasOwnProperty("out") || !person.out) {
-					person.out = moment("Dec 31, 3000", dateFormat);
-				} else {
-					person.out = moment(person.out, dateFormat);
-				}
-				return person;
 			};
 
 			/**
@@ -305,7 +224,7 @@
 					return;
 				}
 				if (k === "in" || k === "out") {
-					result = result.format(dateFormat);
+					result = result.format(util.dateFormat);
 				}
 				if (result === "Dec 31, 3000" || result === "Jan 01, 1970") {
 					return;
@@ -320,7 +239,7 @@
 			 */
 			billReplacer = function (k, v) {
 				if (k === "start" || k === "end") {
-					return v.format(dateFormat);
+					return v.format(util.dateFormat);
 				}
 				return v;
 			};
@@ -331,8 +250,6 @@
 				peopleReviver: peopleReviver,
 				billReplacer: billReplacer,
 				peopleReplacer: peopleReplacer,
-				billify: billify,
-				personify: personify,
 				validateDate: validateDate
 			};
 		});

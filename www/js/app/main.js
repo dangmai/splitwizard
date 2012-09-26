@@ -2,12 +2,12 @@
 (function () {
 	'use strict';
 
-	define(['app/split', 'mustache', 'text!app/templates/form.html',
+	define(['app/split', 'app/model', 'mustache', 'text!app/templates/form.html',
 		'text!app/templates/bill-row.html',
 		'text!app/templates/person-row.html', 'text!app/templates/result.html',
 		'jquery', 'jquery.validate', 'domReady!', 'bootstrap-datepicker'],
-		function (split, Mustache, formTemplateSrc, billRowSrc, personRowSrc,
-			resultSrc, $) {
+		function (split, model, Mustache, formTemplateSrc, billRowSrc,
+			personRowSrc, resultSrc, $) {
 
 			var	peopleCount = 0,
 				billCount = 0,
@@ -32,14 +32,14 @@
 					var name = $(el).find('[name^=name]').val(),
 						inDate = $(el).find('[name^=in]').val(),
 						outDate = $(el).find('[name^=out]').val();
-					people.push(split.personify({"name": name, "in": inDate, "out": outDate}));
+					people.push(new model.Person(name, inDate, outDate));
 				});
 				$.each($('#main-form tr[id^=bill]'), function (index, el) {
 					var forVal = $(el).find('[name^=for]').val(),
 						start = $(el).find('[name^=start]').val(),
 						end = $(el).find('[name^=end]').val(),
 						total = parseFloat($(el).find('[name^=total]').val());
-					bills.push(split.billify({"for": forVal, "start": start, "end": end, "total": total}));
+					bills.push(new model.Bill(forVal, total, start, end));
 				});
 				results = split.calculate(bills, people);
 				$('.result').html(Mustache.render(resultSrc, { "people": results }));
@@ -123,7 +123,7 @@
 			});
 			$('#more-people').trigger("click", {
 				"name": "Saqib",
-				"in": "Aug 05, 2012",
+				"in": "Aug 09, 2012",
 				"out": "Sept 05, 2012"
 			});
 

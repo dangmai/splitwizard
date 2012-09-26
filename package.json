@@ -1,4 +1,9 @@
 {
+  "name": "billsplitter",
+  "version": "0.1.0",
+  "author": "Dang Mai <contact@dangmai.net>",
+  "description": "a simple bill splitter",
+  "license": "MIT",
   "amd": {},
   "volo": {
     "baseUrl": "www/js/lib",
@@ -15,5 +20,12 @@
       "domReady": "github:requirejs/domReady/2.0.1",
       "bootstrap-datepicker": "github:eternicode/bootstrap-datepicker/master"
     }
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "chai": "*",
+    "mocha": "*",
+    "requirejs": "*",
+    "mocha-phantomjs": "https://github.com/metaskills/mocha-phantomjs/tarball/master"
   }
 }
