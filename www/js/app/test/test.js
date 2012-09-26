@@ -19,7 +19,8 @@
             spec = [
                 "app/spec/split",
                 "app/spec/model",
-                "app/spec/main"
+                "app/spec/main",
+                "app/spec/util"
             ];
         mocha.ui('bdd');
         mocha.reporter('html');
