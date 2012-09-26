@@ -36,7 +36,7 @@
                 it('should handle days with no one present gracefully', function () {
                     // If there are days with no one present, and there are
                     // variations in the # of days the people in the house,
-                    // it leads to the situation where the matrix cannot be
+                    // it may lead to the situation where the matrix cannot be
                     // inversed; and thus a solution cannot be found.
                     var neo = new model.Person("Neo", "Jan 1, 2012",
                         "Dec 31, 3000"),
@@ -46,8 +46,8 @@
                             "Dec 20, 2011", "Jan 30, 2012"),
                         result;
                     result = split.calculate([bill], [neo, trinity]);
-                    expect(Math.floor(result[0].owes[0].amount)).to.equal(1500);
-                    expect(Math.floor(result[1].owes[0].amount)).to.equal(1500);
+                    expect(Math.floor(result[0].owes[0].amount)).to.equal(2000);
+                    expect(Math.floor(result[1].owes[0].amount)).to.equal(1000);
                 });
             });
         });
