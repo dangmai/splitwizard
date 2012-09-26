@@ -2,11 +2,11 @@
 (function () {
 	'use strict';
 
-	define(['app/split', 'app/model', 'mustache', 'text!app/templates/form.html',
-		'text!app/templates/bill-row.html',
+	define(['app/split', 'app/model', 'app/util', 'mustache',
+		'text!app/templates/form.html', 'text!app/templates/bill-row.html',
 		'text!app/templates/person-row.html', 'text!app/templates/result.html',
 		'jquery', 'jquery.validate', 'domReady!', 'bootstrap-datepicker'],
-		function (split, model, Mustache, formTemplateSrc, billRowSrc,
+		function (split, model, util, Mustache, formTemplateSrc, billRowSrc,
 			personRowSrc, resultSrc, $) {
 
 			var	peopleCount = 0,
@@ -47,7 +47,7 @@
 
 			// Validationa on the form
 			$.validator.addMethod("moment", function (value, element) {
-				return this.optional(element) || split.validateDate(value);
+				return this.optional(element) || util.validateDate(value);
 			}, "Not a date");
 			$.validator.addMethod("laterthan", function (value, element, startEl) {
 				return this.optional(element) || this.optional($(startEl).get(0)) || (moment(value).diff(moment($(startEl).val())) > 0);
