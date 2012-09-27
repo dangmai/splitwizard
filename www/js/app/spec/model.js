@@ -15,6 +15,12 @@
                     expect(moment.isMoment(person.out)).to.be.true;
                     expect(person.out.year()).to.equal(1957);
                 });
+                it('should put in placeholder dates when necessary', function () {
+                    var noin = new model.Person("No in", null, "Jan 14, 2012"),
+                        noout = new model.Person("No in", "Jan 14, 1957", null);
+                    expect(noin['in'].year()).to.equal(1970);
+                    expect(noout.out.year()).to.equal(3000);
+                })
                 it('should be cloned correctly', function () {
                     var person = new model.Person("Humphrey", "Dec 25, 1899",
                         "Jan 14, 1957"),
