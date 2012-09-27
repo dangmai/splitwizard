@@ -8,7 +8,6 @@
             app: '../app',
             "bootstrap-datepicker": 'bootstrap-datepicker/js/bootstrap-datepicker'
         },
-        urlArgs: "bust=" +  (new Date()).getTime(),
         shim: {
             'bootstrap-datepicker': ['jquery']
         }

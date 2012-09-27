@@ -1,3 +1,4 @@
+/*global requirejs*/
 // For any third party dependencies, like jQuery, place them in the lib folder.
 
 // Configure loading modules from the lib directory,
@@ -7,9 +8,8 @@ requirejs.config({
     baseUrl: 'js/lib',
     paths: {
         app: '../app',
-		"bootstrap-datepicker": 'bootstrap-datepicker/js/bootstrap-datepicker',
+		"bootstrap-datepicker": 'bootstrap-datepicker/js/bootstrap-datepicker'
     },
-	urlArgs: "bust=" +  (new Date()).getTime(),
 	shim: {
 		'bootstrap-datepicker': ['jquery']
 	}
