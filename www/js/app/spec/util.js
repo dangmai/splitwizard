@@ -54,7 +54,7 @@
                                 "Sep 30, 1955"),
                             peopleJSON = JSON.stringify([humphrey, james],
                                 util.peopleReplacer),
-                            correctJSON = '[{"name":"Humphrey","in":"Dec 25, 1899","out":"Jan 14, 1957"},{"name":"James","in":"Feb 8, 1931","out":"Sep 30, 1955"}]';
+                            correctJSON = '[{"name":"Humphrey","in":"Dec 25, 1899","out":"Jan 14, 1957"},{"name":"James","in":"Feb 08, 1931","out":"Sep 30, 1955"}]';
                         expect(peopleJSON).to.equal(correctJSON);
                     });
                 });
@@ -66,7 +66,7 @@
                                 "Feb 8, 1931", "Sep 30, 1955"),
                             billsJSON = JSON.stringify([el, internet],
                                 util.billsReplacer),
-                            correctJSON = '[{"for":"Electricity","total":50,"start":"May 25, 1899","end":"Jan 14, 1957"},{"for":"Internet","total":60,"start":"Feb 08, 1931","end":"Sep 30, 1955"}]';
+                            correctJSON = '[{"for":"Electricity","total":50,"start":"Dec 25, 1899","end":"Jan 14, 1957"},{"for":"Internet","total":60,"start":"Feb 08, 1931","end":"Sep 30, 1955"}]';
                         console.log(billsJSON);
                         expect(billsJSON).to.equal(correctJSON);
                     });
