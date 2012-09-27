@@ -1,4 +1,4 @@
-/*global define*/
+/*global define, requirejs*/
 (function () {
     "use strict";
 
@@ -22,7 +22,9 @@
              */
             billsReviver: function (k, v) {
                 if (v.hasOwnProperty("start") && v.hasOwnProperty("end")) {
-                    return new model.Bill(v['for'], v.total, v.start, v.end);
+                    // Circular dependencies, so this is necessary
+                    var Bill = requirejs('app/model').Bill;
+                    return new Bill(v['for'], v.total, v.start, v.end);
                 }
                 return v;
             },
@@ -34,7 +36,9 @@
              */
             peopleReviver: function (k, v) {
                 if (v.hasOwnProperty("name")) {
-                    return new model.Person(v.name, v['in'], v.out);
+                    // Circular dependencies
+                    var Person = requirejs('app/model').Person;
+                    return new Person(v.name, v['in'], v.out);
                 }
                 return v;
             },

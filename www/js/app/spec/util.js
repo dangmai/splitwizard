@@ -1,4 +1,4 @@
-/*global describe, it, define,chai*/
+/*global describe, it, define, chai, requirejs*/
 (function () {
     "use strict";
 
@@ -28,11 +28,49 @@
                             var people = JSON.parse(peopleJSON, util.peopleReviver);
                             _.each(people, function (person) {
                                 expect(person).to.be.an.instanceof(model.Person);
+                                expect(moment.isMoment(person['in'])).to.be.true;
+                                expect(moment.isMoment(person.out)).to.be.true;
                             });
                             done();
-                        })
-                    })
-                })
+                        });
+                    });
+                });
+                describe('billsReviver', function () {
+                    it("should correctly revives bills from JSON", function (done) {
+                        requirejs(['text!app/test/bills.json'], function (billsJSON) {
+                            var bills = JSON.parse(billsJSON, util.billsReviver);
+                            _.each(bills, function (bill) {
+                                expect(bill).to.be.an.instanceof(model.Bill);
+                            });
+                            done();
+                        });
+                    });
+                });
+                describe('peopleReviver', function () {
+                    it("should correctly dumps people to JSON", function () {
+                        var humphrey = new model.Person("Humphrey", "Dec 25, 1899",
+                            "Jan 14, 1957"),
+                            james = new model.Person("James", "Feb 8, 1931",
+                                "Sep 30, 1955"),
+                            peopleJSON = JSON.stringify([humphrey, james],
+                                util.peopleReplacer),
+                            correctJSON = '[{"name":"Humphrey","in":"Dec 25, 1899","out":"Jan 14, 1957"},{"name":"James","in":"Feb 8, 1931","out":"Sep 30, 1955"}]';
+                        expect(peopleJSON).to.equal(correctJSON);
+                    });
+                });
+                describe('billsReviver', function () {
+                    it("should correctly dumps bills to JSON", function () {
+                        var el = new model.Bill("Electricity", 50,
+                            "Dec 25, 1899", "Jan 14, 1957"),
+                            internet = new model.Bill("Internet", 60,
+                                "Feb 8, 1931", "Sep 30, 1955"),
+                            billsJSON = JSON.stringify([el, internet],
+                                util.billsReplacer),
+                            correctJSON = '[{"for":"Electricity","total":50,"start":"May 25, 1899","end":"Jan 14, 1957"},{"for":"Internet","total":60,"start":"Feb 08, 1931","end":"Sep 30, 1955"}]';
+                        console.log(billsJSON);
+                        expect(billsJSON).to.equal(correctJSON);
+                    });
+                });
             });
             return {};
         });
