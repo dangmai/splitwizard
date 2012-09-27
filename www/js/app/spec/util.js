@@ -67,7 +67,6 @@
                             billsJSON = JSON.stringify([el, internet],
                                 util.billsReplacer),
                             correctJSON = '[{"for":"Electricity","total":50,"start":"Dec 25, 1899","end":"Jan 14, 1957"},{"for":"Internet","total":60,"start":"Feb 08, 1931","end":"Sep 30, 1955"}]';
-                        console.log(billsJSON);
                         expect(billsJSON).to.equal(correctJSON);
                     });
                 });
