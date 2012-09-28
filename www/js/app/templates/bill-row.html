@@ -1,31 +1,39 @@
-<tr id="bill{{billId}}">
-	<td>
-		<div class="control-group">
-			<div class="controls">
-				<input type="text" class="span3 required" name="for{{billId}}" value="{{for}}">
-			</div>
-		</div>
-	</td>
-	<td>
-		<div class="control-group">
-			<div class="controls">
-				<input type="text" class="span1 required number" name="total{{billId}}" value="{{total}}">
-			</div>
-		</div>
-	</td>
-	<td>
-		<div class="control-group">
-			<div class="controls">
-				<input type="text" class="date-field moment required" name="start{{billId}}" id="start{{billId}}" value="{{start}}">
-			</div>
-		</div>
-	</td>
-	<td>
-		<div class="control-group">
-			<div class="controls">
-				<input type="text" class="date-field moment required" name="end{{billId}}" laterthan="#start{{billId}}" value="{{end}}">
-			</div>
-		</div>
-	</td>
-	{{#removable}}<td><a class="remove" href="#">Remove</a>{{/removable}}
-</tr>
+<div class="bill" id="bill{{billId}}">
+    <div class="row">
+        <div class="span4 form-inline">
+        	<div class="control-group">
+	            <label for="for{{billId}}" class="span1">What For</label>
+	            <div class="controls">
+	            	<input class="span3 required" type="text" id="for{{billId}}" name="for{{billId}}" value="{{for}}">
+	            </div>
+           </div>
+        </div>
+        <div class="span2 form-inline">
+        	<div class="control-group">
+	            <label for="total{{billId}}" class="span1">Total Due</label>
+	            <div class="controls">
+	            	<input class="span1 required number" type="text" id="total{{billId}}" name="total{{billId}}" value="{{total}}">
+	            </div>
+	        </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="span3 form-inline">
+        	<div class="control-group">
+	            <label for="start{{billId}}" class="span1">Start Date</label>
+	            <div class="controls">
+	            	<input class="span2 required moment" type="text" id="start{{billId}}" name="start{{billId}}" value="{{start}}">
+	            </div>
+	        </div>
+        </div>
+        <div class="span3 form-inline">
+        	<div class="control-group">
+	            <label for="end{{billId}}" class="span1">End Date</label>
+	            <div class="controls">
+	            	<input class="span2 required moment" laterthan="#start{{billId}}" type="text" id="end{{billId}}" name="end{{billId}}" value="{{end}}">
+	            </div>
+	        </div>
+        </div>
+    </div>
+    {{#removable}}<a class="remove" href="#">Remove</a>{{/removable}}
+</div>

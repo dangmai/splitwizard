@@ -6,9 +6,12 @@
         <title></title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
-        <link rel="stylesheet" href="css/bootstrap.min.css">
-		<link rel="stylesheet" href="css/bootstrap-responsive.min.css">
+        <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.1.1/css/bootstrap.no-icons.min.css" rel="stylesheet">
+        <link href="//netdna.bootstrapcdn.com/font-awesome/2.0/css/font-awesome.css" rel="stylesheet">
+        <link href="//netdna.bootstrapcdn.com/font-awesome/2.0/css/font-awesome-ie7.css" rel="stylesheet">
 		<link rel="stylesheet" href="js/lib/bootstrap-datepicker/css/datepicker.css">
+        <link href='http://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Cabin' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="css/main.css">
         <script data-main="js/app" src="js/lib/require.js"></script>
 		
@@ -18,13 +21,32 @@
             <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
         <![endif]-->
 		<div class="container">
+            <h1 class="logo pagination-centered">Kill (The) Bills</h1>
+            <div class="welcome row">
+                <div class="span6 pagination-centered">
+                    <h2>What is this?</h2>
+                    Kill (The) Bills is a small app to split the bill(s) fairly among all tenants.
+                </div>
+                <div class="span6 pagination-centered">
+                    <h2>When to use this?</h2>
+                    Whenever! Particularly when people move in/out in the middle of a billing cycle.
+                </div>
+                <!--Consider the following situation: <br>
+                Beatrix, Bill, Budd, Vernita and Elle were living together.<br>
+                Beatrix moved out in the middle of an Electricity billing cycle.<br>
+                Vernita then moved before the Internet bill runs out.<br>
+                Budd and Elle had an argument and left shortly after.<br>
+                How should the bills be split fairly?<br>
+                Kill (The) Bills is here for the rescue! -->
+            </div>
 			<div class="row main pagination-centered">
-				<h1>Split The Bills</h1>
-				<div class="main-form-wrapper"></div>
-				<div class="result"></div>
-				<footer>(c) <a href="http://dangmai.net">Dang Mai</a></footer>
+                <div class="result hide"></div>
+				<form id="main-form"></form>
 			</div>
-			
+            <footer>
+                © <a href="http://dangmai.net">Dang Mai</a>.<br>
+                Source at <a href="//github.com">Github</a>
+            </footer>
 		</div>
     </body>
 </html>

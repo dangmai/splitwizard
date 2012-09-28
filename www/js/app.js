@@ -8,10 +8,18 @@ requirejs.config({
     baseUrl: 'js/lib',
     paths: {
         app: '../app',
-		"bootstrap-datepicker": 'bootstrap-datepicker/js/bootstrap-datepicker'
+		"bootstrap-datepicker": 'bootstrap-datepicker/js/bootstrap-datepicker',
+        'jquery-ui': [
+            '//ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min',
+            'jquery-ui'
+        ]
     },
 	shim: {
-		'bootstrap-datepicker': ['jquery']
+        // JqueryUI and Bootstrap Datepicker both use $.datepicker, so it is
+        // necessary that BD loads later in order to override JQueryUI's.
+		'bootstrap-datepicker': ['jquery', 'jquery-ui'],
+        'jquery-ui': ['jquery'],
+        'jquery.cookie': ['jquery']
 	}
 });
 

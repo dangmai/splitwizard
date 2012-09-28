@@ -1,15 +1,14 @@
-<ul>
 {{#people}}
-	<li>
-		{{name}} owes: {{total}}
-		<ul>
+<div class="result-person">
+	{{name}} owes {{total}} <a href="#" class="result-details" data-toggle="#result-details-{{index}}"><i class="icon-plus"></i></a>
+	<div class="hide" id="result-details-{{index}}">
 		{{#owes}}
-			<li>{{amount}} for {{bill.for}} between {{bill.start}} and {{bill.end}}</li>
+			<div>{{amount}} for {{bill.for}} between {{bill.start}} and {{bill.end}}</div>
 		{{/owes}}
-		{{^owes}}
-		Nothing
-		{{/owes}}
-		</ul>
-	</li>
+	</div>
+</div>
 {{/people}}
-</ul>
+<p>
+	Don't want to enter the people next time? Click <a class="save" href="#">here</a> to save them. 
+	<span class="save-completed hide"><i class="icon-ok"></i></span>
+</p>

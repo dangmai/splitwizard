@@ -1,19 +1,77 @@
+body {
+    font-family: 'Cabin', Helvetica, Arial, sans-serif;
+    font-size: 1em;
+    line-height: 25px;
+    background-image: url('../img/grey.png');
+}
+h1, h2, h3, h4 {
+    font-family: 'Lobster', Georgia, Times, serif;
+}
+
+h1 {
+    font-size: 4em;
+    line-height: 1.4em;
+}
+
 label {
-	font-size: 1.1em;
+    padding-top: 5px;
 }
 
-.tenant-row {
-	margin-bottom: 1em;
+.welcome, .result {
+    border-top: 1px dotted;
+    border-bottom: 1px dotted;
 }
 
-.tenant-name {
-	margin-bottom: 0.5em;
+.welcome {
+    padding-bottom: 1em;
 }
 
-.table-centered {
-	margin: 0 auto;
+.result {
+    padding-top: 0.6em;
+    padding-bottom: 0.3em;
 }
 
-.date-field {
-	width: 100px;
+.main {
+    margin-bottom: 1em;
+}
+
+.person, .bill {
+    border-bottom: 1px dashed #c1c1c1;
+    padding: 1em 0;
+}
+
+.category-title {
+    font-family: 'Lobster', Georgia, Times, serif;
+    font-size: 2.5em;
+    padding: 0.5em 0;
+}
+
+.save-completed {
+    color: #46a546;
+}
+
+.result-details {
+    color: #46a546;
+    font-size: 0.9em;
+}
+
+.result-details:hover {
+    text-decoration: inherit;
+    color: #387038;
+}
+
+.remove {
+    color: red;
+}
+
+footer {
+    position:fixed;
+    left: 0px;
+    bottom: 0px;
+    height: 40px;
+    width: 100%;
+    text-align: right;
+    font-size: 0.9em;
+    line-height: 1.2em;
+    padding-right: 1em;
 }

@@ -1,25 +1,16 @@
 <form id="main-form">
-	<legend>People</legend>
-	<table class="table-centered" id="people-table">
-		<tr>
-			<td class="span4">Name</td>
-			<td>Move In</td>
-			<td>Move Out</td>
-			<td style="width: 70px;"></td>
-		</tr>
-	</table>
-	<a href="#" id="more-people">More people</a>
-	<legend>Bills</legend>
-	<table class="table-centered" id="bills-table">
-		<tr>
-			<td>For</td>
-			<td>Total</td>
-			<td>From</td>
-			<td>Until</td>
-			<td style="width: 70px;"></td>
-		</tr>
-	</table>
-	<a href="#" id="more-bills">More bills</a>
-	<br>
-	<input type="submit" class="btn btn-success" id="calculate" value="Calculate">
+	<div class="row">
+		<div class="span6">
+	        <div class="category-title pagination-centered">The People</div>
+	        <div class="people"></div>
+	        <a href="#" id="more-people"><i class="icon-plus"></i> Add Another Person</a>
+	    </div>
+	    <div class="span6">
+	        <div class="category-title pagination-centered">The Bills</div>
+	        <div class="bills"></div>
+	        <a href="#" id="more-bills"><i class="icon-plus"></i> Add Another Bill</a>
+	    </div>
+	</div>
+
+    <input class="btn btn-success btn-large" type="submit" value="Split 'Em Up">
 </form>

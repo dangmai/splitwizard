@@ -5,7 +5,8 @@
 	define(['app/split', 'app/model', 'app/util', 'mustache',
 		'text!app/templates/form.html', 'text!app/templates/bill-row.html',
 		'text!app/templates/person-row.html', 'text!app/templates/result.html',
-		'jquery', 'jquery.validate', 'domReady!', 'bootstrap-datepicker'],
+		'jquery', 'jquery.validate', 'jquery.cookie', 'jquery-ui', 'domReady!',
+		'bootstrap-datepicker'],
 		function (split, model, util, Mustache, formTemplateSrc, billRowSrc,
 			personRowSrc, resultSrc, $) {
 
@@ -14,27 +15,49 @@
 				formTmpl = Mustache.render(formTemplateSrc),
 				removable,
 				calculate,
-				initializeDatepicker;
+				initializeDatepicker,
+				results,
+				// The two array below are declared here instead of inside
+				// calculate() in order to make it easy to save to cookies
+				people = [],
+				bills = [];
 
 			removable = function (count) {
 				return (count !== 1);
 			};
-			$('.main-form-wrapper').html(formTmpl);
+
+			// Quick and dirty way to scroll to an element.
+			// Code from http://stackoverflow.com/questions/500336/how-to-scroll-to-an-element-in-jquery
+			$.fn.extend({
+				scrollToMe: function () {
+				    var x = $(this).offset().top - 100;
+				    $('html,body').animate({scrollTop: x}, 500);
+				}
+			});
 
 			/**
 			 * Start the calculations!
 			 */
 			calculate = function () {
-				var people = [],
-					bills = [],
-					results;
-				$.each($('#main-form tr[id^=person]'), function (index, el) {
+				var results,
+					welcomeEl = $('.welcome'),
+					resultEl = $('.result');
+				// Because the arrays are shared with the outer function, make
+				// sure that they are empty before doing anything else.
+				people = [];
+				bills = [];
+				if (welcomeEl.is(':visible')) {
+					welcomeEl.hide('slide', {
+						'direction': 'up'
+					}, 'fast');
+				}
+				$.each($('#main-form .person'), function (index, el) {
 					var name = $(el).find('[name^=name]').val(),
 						inDate = $(el).find('[name^=in]').val(),
 						outDate = $(el).find('[name^=out]').val();
 					people.push(new model.Person(name, inDate, outDate));
 				});
-				$.each($('#main-form tr[id^=bill]'), function (index, el) {
+				$.each($('#main-form .bill'), function (index, el) {
 					var forVal = $(el).find('[name^=for]').val(),
 						start = $(el).find('[name^=start]').val(),
 						end = $(el).find('[name^=end]').val(),
@@ -42,8 +65,16 @@
 					bills.push(new model.Bill(forVal, total, start, end));
 				});
 				results = split.calculate(bills, people);
-				$('.result').html(Mustache.render(resultSrc, { "people": results }));
+				$.each(results, function (index, result) {
+					result.index = index;
+				});
+				resultEl.html(Mustache.render(resultSrc, { "people": results }));
+				resultEl.show('drop', {}, 'slow');
+				resultEl.scrollToMe();
+				return results;
 			};
+
+			$('#main-form').html(formTmpl);
 
 			// Validations on the form
 			$.validator.addMethod("moment", function (value, element) {
@@ -58,7 +89,7 @@
 				debug: true,
 				submitHandler: function (form) {
 					//console.log("submithandler");
-					calculate();
+					results = calculate();
 				},
 				invalidHandler: function () {},
 				highlight: function (label) {
@@ -71,17 +102,17 @@
 
 			$('form').on("click", ".remove", {}, function (e) {
 				e.preventDefault();
-				$(this).parent().parent().remove();
+				$(this).parent().remove();
 			});
 
 			/**
 			 * Initialize bootstrap-datepicker on a certain element. This will 
-			 * check for all alements with class date-field inside the input element
+			 * check for all alements with class moment inside the input element
 			 * and initialize datepicker on them.
 			 * @param (HTMLElement) el the element to initialize datepicker on.
 			 */
 			initializeDatepicker = function (el) {
-				var dateFields = $(el).find(".date-field");
+				var dateFields = $(el).find(".moment");
 				dateFields.datepicker({
 					format: 'M dd, yyyy'
 				});
@@ -97,10 +128,10 @@
 					context = {};
 				}
 				peopleCount += 1;
-				defContext = { peopleId: peopleCount, removable: removable(peopleCount) };
+				defContext = { personId: peopleCount, removable: removable(peopleCount) };
 				$.extend(context, defContext);
 				tmpl = Mustache.render(personRowSrc, context);
-				initializeDatepicker($(tmpl).appendTo($('#people-table')));
+				initializeDatepicker($(tmpl).appendTo($('.people')));
 			});
 			$('#more-bills').click(function (e, context) {
 				e.preventDefault();
@@ -113,31 +144,45 @@
 				defContext = { billId : billCount, removable: removable(billCount) };
 				$.extend(context, defContext);
 				tmpl = Mustache.render(billRowSrc, context);
-				initializeDatepicker($(tmpl).appendTo($('#bills-table')));
+				initializeDatepicker($(tmpl).appendTo($('.bills')));
 			});
 
-			$('#more-people').trigger("click", {
-				"name": "Dang Mai",
-				"in": "Aug 05, 2012",
-				"out": "Sept 05, 2012"
+			$('.result').on('click', '.result-details', function (e) {
+				e.preventDefault();
+				$($(this).data('toggle')).toggle();
 			});
-			$('#more-people').trigger("click", {
-				"name": "Saqib",
-				"in": "Aug 09, 2012",
-				"out": "Sept 05, 2012"
+			$('.result').on('click', '.save', function (e) {
+				e.preventDefault();
+				if (people) {
+					$.cookie('people',
+						JSON.stringify(people, util.peopleReplacer));
+					$('.result .save-completed').show();
+				}
 			});
-
-			$('#more-bills').trigger("click", {
-				"for": "Electricity",
-				"total": 30,
-				"start": "Aug 06, 2012",
-				"end": "Sept 03, 2012"
-			});
-			$('#more-bills').trigger("click", {
-				"for": "Internet",
-				"total": 60,
-				"start": "Aug 06, 2012",
-				"end": "Sept 03, 2012"
-			});
+			if ($.cookie('people')) {
+				$.each(JSON.parse($.cookie('people')), function (index, person) {
+					$('#more-people').trigger("click", {
+						"name": person.name,
+						"in": person["in"],
+						"out": person.out
+					});
+				});
+			} else {
+				$('#more-people').trigger("click");
+				$('#more-people').trigger("click");
+			}
+			if ($.cookie('bills')) {
+				$.each(JSON.parse($.cookie('bills')), function (index, bill) {
+					$('#more-bills').trigger("click", {
+						"for": bill['for'],
+						"total": bill.total,
+						"start": bill.start,
+						"end": bill.end
+					});
+				});
+			} else {
+				$('#more-bills').trigger("click");
+				$('#more-bills').trigger("click");
+			}
 		});
 }());

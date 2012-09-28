@@ -9,7 +9,9 @@
             "bootstrap-datepicker": 'bootstrap-datepicker/js/bootstrap-datepicker'
         },
         shim: {
-            'bootstrap-datepicker': ['jquery']
+            'bootstrap-datepicker': ['jquery', 'jquery-ui'],
+            'jquery-ui': ['jquery'],
+            'jquery.cookie': ['jquery']
         }
     });
     requirejs(['app/split'], function (split) {

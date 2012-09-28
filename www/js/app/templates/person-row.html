@@ -1,24 +1,31 @@
-<tr id="person{{peopleId}}">
-	<td>
-		<div class="control-group">
-			<div class="controls">
-				<input type="text" class="span4 name required" id="name{{peopleId}}" name="name{{peopleId}}" value="{{name}}">
-			</div>
-		</div>
-	</td>
-	<td>
-		<div class="control-group">
-			<div class="controls">
-				<input type="text" class="date-field moment" id="in{{peopleId}}" name="in{{peopleId}}" value="{{in}}">
-			</div>
-		</div>
-	</td>
-	<td>
-		<div class="control-group">
-			<div class="controls">
-				<input type="text" class="date-field moment" id="out{{peopleId}}" name="out{{peopleId}}" laterthan="#in{{peopleId}}" value="{{out}}">
-			</div>
-		</div>
-	</td>
-	{{#removable}}<td><a class="remove" href="#">Remove</a></td>{{/removable}}
-</tr>
+<div class="person" id="person{{personId}}">
+    <div class="row">
+        <div class="span6 form-inline">
+        	<div class="control-group">
+	            <label for="name{{personId}}" class="span1">Name</label>
+	            <div class="controls">
+	            	<input class="span5 required" type="text" id="name{{personId}}" name="name{{personId}}" value="{{name}}">
+	            </div>
+	        </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="span3 form-inline">
+        	<div class="control-group">
+	            <label for="in{{personId}}" class="span1">Move In</label>
+	            <div class="controls">
+	            	<input class="span2 moment" type="text" id="in{{personId}}" name="in{{personId}}" value="{{in}}">
+	            </div>
+	        </div>
+        </div>
+        <div class="span3 form-inline">
+        	<div class="control-group">
+	            <label for="out{{personId}}" class="span1">Move Out</label>
+	            <div class="controls">
+	            	<input class="span2 moment" laterthan="#in{{personId}}" type="text" id="out{{personId}}" name="out{{personId}}" value="{{out}}">
+	            </div>
+	        </div>
+        </div>
+    </div>
+    {{#removable}}<a href="#" class="remove">Remove</a>{{/removable}}
+</div>
