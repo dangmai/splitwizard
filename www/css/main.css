@@ -76,6 +76,6 @@ footer {
     padding-right: 1em;
 }
 
-noscript div {
+noscript div, div.old-ie {
     margin-top: 0.5em;
 }
