@@ -182,7 +182,6 @@
 				});
 			} else {
 				$('#more-bills').trigger("click");
-				$('#more-bills').trigger("click");
 			}
 		});
 }());
