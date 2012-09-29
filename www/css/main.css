@@ -75,3 +75,7 @@ footer {
     line-height: 1.2em;
     padding-right: 1em;
 }
+
+noscript div {
+    margin-top: 0.5em;
+}

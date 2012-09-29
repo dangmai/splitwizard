@@ -1,8 +1,12 @@
 <!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
 <html>
     <head>
 		<meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta http-equiv="X-UA-Compatible" content="IE=8,chrome=1">
         <title></title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
@@ -17,15 +21,9 @@
 		
     </head>
     <body>
-		<!--[if lt IE 7]>
-            <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
-        <![endif]-->
 		<div class="container">
             <h1 class="logo pagination-centered">Split Wizard</h1>
             <div class="welcome row">
-                <div class="span12 pagination-centered">
-                    
-                </div>
                 <div class="span6 pagination-centered">
                     <h2>What?</h2>
                     A Wizard never oversplits the bill, nor undersplits. <br>
@@ -39,6 +37,14 @@
             </div>
 			<div class="row main pagination-centered">
                 <div class="result hide"></div>
+                <!--[if lt IE 7]>
+                    <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
+                <![endif]-->
+                <noscript>
+                    <div class="alert alert-error">
+                        The Wizard does not have the strength to split the bills without the power of Javascript.
+                    </div>
+                </noscript>
 				<form id="main-form"></form>
 			</div>
             <footer>
