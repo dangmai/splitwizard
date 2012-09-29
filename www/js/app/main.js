@@ -34,6 +34,8 @@
 				    $('html,body').animate({scrollTop: x}, 500);
 				}
 			});
+			// Set up the cookie expiration date
+			$.cookie.defaults.expires = 365;
 
 			/**
 			 * Start the calculations!
