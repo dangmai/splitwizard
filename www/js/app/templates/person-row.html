@@ -14,7 +14,7 @@
         	<div class="control-group">
 	            <label for="in{{personId}}" class="span1">Move In</label>
 	            <div class="controls">
-	            	<input class="span2 moment" type="text" id="in{{personId}}" name="in{{personId}}" value="{{in}}">
+	            	<input class="span2 moment" title="Not necessary if outside the billing cycle" type="text" id="in{{personId}}" name="in{{personId}}" value="{{in}}">
 	            </div>
 	        </div>
         </div>
@@ -22,7 +22,7 @@
         	<div class="control-group">
 	            <label for="out{{personId}}" class="span1">Move Out</label>
 	            <div class="controls">
-	            	<input class="span2 moment" laterthan="#in{{personId}}" type="text" id="out{{personId}}" name="out{{personId}}" value="{{out}}">
+	            	<input class="span2 moment" title="Not necessary if outside the billing cycle" laterthan="#in{{personId}}" type="text" id="out{{personId}}" name="out{{personId}}" value="{{out}}">
 	            </div>
 	        </div>
         </div>
