@@ -6,7 +6,7 @@
 		'text!app/templates/form.html', 'text!app/templates/bill-row.html',
 		'text!app/templates/person-row.html', 'text!app/templates/result.html',
 		'jquery', 'jquery.validate', 'jquery.cookie', 'jquery-ui', 'domReady!',
-		'bootstrap-datepicker'],
+		'bootstrap-datepicker', 'Modernizr', 'json2'],
 		function (split, model, util, Mustache, formTemplateSrc, billRowSrc,
 			personRowSrc, resultSrc, $) {
 
@@ -77,30 +77,6 @@
 			};
 
 			$('#main-form').html(formTmpl);
-
-			// Validations on the form
-			$.validator.addMethod("moment", function (value, element) {
-				return this.optional(element) || util.validateDate(value);
-			}, "Not a date");
-			$.validator.addMethod("laterthan", function (value, element, startEl) {
-				return this.optional(element) || this.optional($(startEl).get(0)) || (moment(value).diff(moment($(startEl).val())) > 0);
-			}, "Sooner than start");
-			$.validator.messages.required = $.format("Required");
-			$.validator.messages.number = $.format("Not a number");
-			$('#main-form').validate({
-				debug: true,
-				submitHandler: function (form) {
-					//console.log("submithandler");
-					results = calculate();
-				},
-				invalidHandler: function () {},
-				highlight: function (label) {
-					$(label).closest('.control-group').addClass('error');
-				},
-				unhighlight: function (label) {
-					$(label).closest('.control-group').removeClass('error');
-				}
-			});
 
 			$('form').on("click", ".remove", {}, function (e) {
 				e.preventDefault();
@@ -185,5 +161,29 @@
 			} else {
 				$('#more-bills').trigger("click");
 			}
+			// Validations on the form
+			$.validator.addMethod("moment", function (value, element) {
+				return this.optional(element) || util.validateDate(value);
+			}, "Not a date");
+			$.validator.addMethod("laterthan", function (value, element, startEl) {
+				return this.optional(element) || this.optional($(startEl).get(0)) || (moment(value).diff(moment($(startEl).val())) > 0);
+			}, "Sooner than start");
+			$.validator.messages.required = $.format("Required");
+			$.validator.messages.number = $.format("Not a number");
+			$('#main-form').validate({
+				debug: true,
+				submitHandler: function (form) {
+					//console.log("submithandler");
+					results = calculate();
+				},
+				invalidHandler: function () {},
+				highlight: function (label) {
+					$(label).closest('.control-group').addClass('error');
+				},
+				unhighlight: function (label) {
+					$(label).closest('.control-group').removeClass('error');
+				}
+			});
+			return {};
 		});
 }());

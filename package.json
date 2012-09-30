@@ -20,7 +20,8 @@
       "domReady": "github:requirejs/domReady/2.0.1",
       "bootstrap-datepicker": "github:eternicode/bootstrap-datepicker/master",
       "jquery-ui": "http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js",
-      "jquery.cookie": "github:carhartl/jquery-cookie/v1.2#jquery.cookie.js"
+      "jquery.cookie": "github:carhartl/jquery-cookie/v1.2#jquery.cookie.js",
+      "json2": "github:douglascrockford/JSON-js/master#json2.js"
     }
   },
   "dependencies": {},
