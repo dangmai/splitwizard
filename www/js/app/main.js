@@ -5,8 +5,8 @@
 	define(['app/split', 'app/model', 'app/util', 'mustache',
 		'text!app/templates/form.html', 'text!app/templates/bill-row.html',
 		'text!app/templates/person-row.html', 'text!app/templates/result.html',
-		'jquery', 'jquery.validate', 'jquery.cookie', 'jquery-ui', 'domReady!',
-		'bootstrap-datepicker', 'Modernizr', 'json2'],
+		'jquery', 'jquery.validate', 'jquery.cookie', 'domReady!', 'json2',
+		'bootstrap-datepicker', 'Modernizr'],
 		function (split, model, util, Mustache, formTemplateSrc, billRowSrc,
 			personRowSrc, resultSrc, $) {
 
@@ -26,8 +26,8 @@
 				return (count !== 1);
 			};
 
-			// Quick and dirty way to scroll to an element.
-			// Code from http://stackoverflow.com/questions/500336/how-to-scroll-to-an-element-in-jquery
+			// Quick and dirty way to scroll to an element. Code from
+			// http://stackoverflow.com/questions/500336/how-to-scroll-to-an-element-in-jquery
 			$.fn.extend({
 				scrollToMe: function () {
 				    var x = $(this).offset().top - 100;
@@ -48,11 +48,7 @@
 				// sure that they are empty before doing anything else.
 				people = [];
 				bills = [];
-				if (welcomeEl.is(':visible')) {
-					welcomeEl.hide('slide', {
-						'direction': 'up'
-					}, 'fast');
-				}
+
 				$.each($('#main-form .person'), function (index, el) {
 					var name = $(el).find('[name^=name]').val(),
 						inDate = $(el).find('[name^=in]').val(),
@@ -71,7 +67,16 @@
 					result.index = index;
 				});
 				resultEl.html(Mustache.render(resultSrc, { "people": results }));
-				resultEl.show('drop', {}, 'slow');
+				// resultEl.show('drop', {}, 'slow');
+				if (welcomeEl.is(':visible')) {
+					welcomeEl.fadeOut("fast", function () {
+						// So that it appears smoothly after the welcome div
+						// fades out
+						resultEl.fadeIn("slow");
+					});
+				} else {
+					resultEl.fadeIn("slow");
+				}
 				resultEl.scrollToMe();
 				return results;
 			};
