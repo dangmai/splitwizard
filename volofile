@@ -14,9 +14,29 @@ define(function (require) {
                 //Remove the old dir
                 v.rm('www-built');
 
-                d.resolve(v.spawn('node', ['tools/r.js', '-o', 'tools/build.js'], {
+                v.spawn('node', ['tools/r.js', '-o', 'tools/build.js'], {
                     useConsole: !namedArgs.quiet
-                }));
+                })
+                .then(function () {
+                    // Versionify!
+                    var files = [
+                        'index.html',
+                        '404.html',
+                        'js/app.js'
+                    ],
+                        fileContent,
+                        version = JSON.parse(v.read('package.json')).version;
+                    files = files.map(function (file) {
+                        return 'www-built/' + file;
+                    });
+                    files.forEach(function (file) {
+                        fileContent = v.read(file);
+                        fileContent = fileContent.replace(/v\.placeholder/g, 'v'+version);
+                        v.write(file, fileContent);
+                    });
+
+                    d.resolve("Build completed");
+                });
             }
         }
     }
