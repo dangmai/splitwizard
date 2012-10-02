@@ -38,6 +38,13 @@ define(function (require) {
                     d.resolve("Build completed");
                 });
             }
-        }
+        },
+
+        appcache: require('volo-appcache')({
+            depends: [],
+            dir: 'www-built',
+            htmlPath: 'index.html',
+            manifestTemplate: ''
+        })
     }
 });

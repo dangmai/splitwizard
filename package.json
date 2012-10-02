@@ -28,6 +28,8 @@
     "chai": "*",
     "mocha": "*",
     "requirejs": "*",
-    "mocha-phantomjs": "https://github.com/metaskills/mocha-phantomjs/tarball/master"
+    "mocha-phantomjs": "https://github.com/metaskills/mocha-phantomjs/tarball/master",
+    "volo": "*",
+    "volo-appcache": "*"
   }
 }
