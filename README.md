@@ -6,12 +6,14 @@ The website requires no server-side language, so it is a matter of building and 
 To build, you need [volo](http://volojs.org), then:
 
 `volo add`
+
 `volo build`
 
 #Tests
 To run tests, you will need [Node](http://nodejs.org) and [npm](http://npmjs.org)
 
 `npm install`
+
 `phantomjs node_modules/mocha-phantomjs/lib/mocha-phantomjs.coffee www/js/app/test/runner.html`
 
 Or if you rather run it a browser:
