@@ -1,3 +1,5 @@
+@import url("../js/lib/bootstrap-datepicker/css/datepicker.css");
+
 body {
     font-family: 'Cabin', Helvetica, Arial, sans-serif;
     font-size: 1em;

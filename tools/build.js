@@ -16,6 +16,7 @@
         "jquery.validate": "empty:"
     },
     "mainConfigFile": "../www/js/app.js", // relative to this file
+    "optimizeCss": "standard",
     "dir": "../www-built",
     "modules": [
         {

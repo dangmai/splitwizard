@@ -14,29 +14,43 @@ define(function (require) {
                 //Remove the old dir
                 v.rm('www-built');
 
-                v.spawn('node', ['tools/r.js', '-o', 'tools/build.js'], {
+                d.resolve(v.spawn('node', ['tools/r.js', '-o', 'tools/build.js'], {
                     useConsole: !namedArgs.quiet
-                })
-                .then(function () {
-                    // Versionify!
-                    var files = [
-                        'index.html',
-                        '404.html',
-                        'js/app.js'
-                    ],
-                        fileContent,
-                        version = JSON.parse(v.read('package.json')).version;
-                    files = files.map(function (file) {
-                        return 'www-built/' + file;
-                    });
-                    files.forEach(function (file) {
-                        fileContent = v.read(file);
-                        fileContent = fileContent.replace(/v\.placeholder/g, 'v'+version);
-                        v.write(file, fileContent);
-                    });
+                }));
+            }
+        },
 
-                    d.resolve("Build completed");
+        versionify: {
+            run: function(d, v, namedArgs) {
+                var files = [
+                    'index.html',
+                    '404.html',
+                    'js/app.js'
+                ],
+                    fileContent,
+                    version = JSON.parse(v.read('package.json')).version;
+                files = files.map(function (file) {
+                    return 'www-built/' + file;
                 });
+                files.forEach(function (file) {
+                    fileContent = v.read(file);
+                    fileContent = fileContent.replace(/v\.placeholder/g, 'v'+version);
+                    v.write(file, fileContent);
+                });
+                d.resolve("Versionify completed");
+            }
+        },
+
+        clean: {
+            run: function(d, v, namedArgs) {
+                v.rm('www-built/js/app');
+                v.rm('www-built/build.txt');
+                // Hackish, but better than manually removing files
+                v.mv('www-built/js/lib/require.js', 'www-built/js/require.temp.js');
+                v.rm('www-built/js/lib');
+                v.mkdir('www-built/js/lib');
+                v.mv('www-built/js/require.temp.js', 'www-built/js/lib/require.js');
+                d.resolve("Clean completed");
             }
         },
 
@@ -45,6 +59,29 @@ define(function (require) {
             dir: 'www-built',
             htmlPath: 'index.html',
             manifestTemplate: ''
-        })
+        }),
+
+        deploy: {
+            depends: ['build', 'versionify', 'clean', 'appcache'],
+
+            /**
+             * Deploying the site.
+             * @param {String} folderLocation the relative path to the server
+             * root of the website. If this is not setup correctly, the 404
+             * page will not be used. Default: '/splitwizard/www-built'.
+             */
+            run: function(d, v, namedArgs, folderLocation) {
+                var fileContent;
+                if (!folderLocation) {
+                    folderLocation = '/splitwizard/www-built/';
+                }
+                fileContent = v.read('www-built/.htaccess');
+                fileContent = fileContent.replace(/404 \/splitwizard\/www\//,
+                    "404 " + folderLocation);
+                v.write('www-built/.htaccess', fileContent);
+
+                d.resolve("Deploy completed");
+            }
+        }
     }
 });
