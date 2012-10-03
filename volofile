@@ -4,7 +4,7 @@ define(function (require) {
     'use strict';
 
     return {
-        build: {
+        optimize: {
             flags: {
                 //Does not print the build output.
                 'q': 'quiet'
@@ -61,14 +61,14 @@ define(function (require) {
             manifestTemplate: ''
         }),
 
-        deploy: {
-            depends: ['build', 'versionify', 'clean', 'appcache'],
+        build: {
+            depends: ['optimize', 'versionify', 'clean', 'appcache'],
 
             /**
-             * Deploying the site.
+             * Build the site.
              * @param {String} folderLocation the relative path to the server
              * root of the website. If this is not setup correctly, the 404
-             * page will not be used. Default: '/splitwizard/www-built'.
+             * page will not be used. Default: '/splitwizard/www-built/'.
              */
             run: function(d, v, namedArgs, folderLocation) {
                 var fileContent;
@@ -80,7 +80,7 @@ define(function (require) {
                     "404 " + folderLocation);
                 v.write('www-built/.htaccess', fileContent);
 
-                d.resolve("Deploy completed");
+                d.resolve("Build completed");
             }
         }
     }
