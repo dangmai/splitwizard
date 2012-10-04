@@ -43,23 +43,97 @@ define(function (require) {
 
         clean: {
             run: function(d, v, namedArgs) {
+                // Be careful not to remove all the libs, as we still need to
+                // cache them for AppCache functionality. Basically, all scripts
+                // that reside on the CDN need to be cached as well.
+
+                var escape = function(s) {
+                    // Escape string to be used in JS regex. Code from:
+                    // http://stackoverflow.com/questions/3561493
+                    return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')
+                },
+                    excludePattern = "(",
+                    fullFilePaths,
+                    filesToSave = [
+                        "require.js",
+                        "jquery.js",
+                        "moment.js",
+                        "Modernizr.js",
+                        "json2.js",
+                        "jquery.validate.js"
+                    ];
                 v.rm('www-built/js/app');
                 v.rm('www-built/build.txt');
-                // Hackish, but better than manually removing files
-                v.mv('www-built/js/lib/require.js', 'www-built/js/require.temp.js');
-                v.rm('www-built/js/lib');
-                v.mkdir('www-built/js/lib');
-                v.mv('www-built/js/require.temp.js', 'www-built/js/lib/require.js');
+
+                filesToSave.forEach(function (file, index) {
+                    excludePattern += escape(file);
+                    if (index !== filesToSave.length - 1) {
+                        excludePattern += "|";
+                    }
+                });
+                excludePattern += ")";
+                fullFilePaths = v.getFilteredFileList("www-built/js/lib", /./,
+                    new RegExp(excludePattern));
+                fullFilePaths.forEach(function (file) {
+                    v.rm(file);
+                    console.log("Removed file " + file);
+                });
                 d.resolve("Clean completed");
             }
         },
 
-        appcache: require('volo-appcache')({
+        'appcache-build-manifest': require('volo-appcache')({
             depends: [],
             dir: 'www-built',
             htmlPath: 'index.html',
             manifestTemplate: ''
         }),
+
+        /**
+         * Because of our cache bursting strategy, volo-appcache won't cache
+         * the correct static assets (as they need to be prepended with the
+         * version number), so this is a necessary step to fix those assets'
+         * paths. Also, any files that are not necessary can be removed here.
+         */
+        appcache: {
+            depends: ['appcache-build-manifest'],
+
+            run: function(d, v, namedArgs) {
+                var fileContent = v.read('www-built/manifest.appcache'),
+                    version = JSON.parse(v.read('package.json')).version,
+                    filesToRemove,
+                    removeRegExPattern = "(";
+                filesToRemove = [
+                    "404.html",
+                    "humans.txt",
+                    "robots.txt",
+                    "404-confused-wizard.jpg"
+                ],
+                // Correct static assets' paths
+                fileContent = fileContent.replace(/(.*?)(css|js|img)([\\/])(.+)/g,
+                    function (match, path, folder, sep, rest) {
+                        return path.concat("static", sep, "v", version, sep,
+                            folder, sep, rest);
+                    });
+
+                // Remove unnecessary files
+                filesToRemove.forEach(function (file, index) {
+                    removeRegExPattern += "(^.*)" + escape(file) + "\\n";
+                    if (index !== filesToRemove.length - 1) {
+                        removeRegExPattern += "|";
+                    }
+                });
+                removeRegExPattern += ")";
+                // The RegEx needs to be in multi-line mode, so that ^ matches
+                // the start of the line, and global mode to find all the files.
+                fileContent = fileContent.replace(new RegExp(removeRegExPattern, "gm"),
+                    function (match, line) {
+                        return "";
+                    });
+                v.write('www-built/manifest.appcache', fileContent);
+                d.resolve("AppCache preparation completed");
+            }
+        },
 
         build: {
             depends: ['optimize', 'versionify', 'clean', 'appcache'],

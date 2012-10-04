@@ -1,6 +1,6 @@
 {
-  "name": "billsplitter",
-  "version": "1.0.0",
+  "name": "SplitWizard",
+  "version": "1.0.1",
   "author": "Dang Mai <contact@dangmai.net>",
   "description": "a simple bill splitter",
   "license": "MIT",
@@ -30,6 +30,6 @@
     "requirejs": "*",
     "mocha-phantomjs": "https://github.com/metaskills/mocha-phantomjs/tarball/master",
     "volo": "*",
-    "volo-appcache": "*"
+    "volo-appcache": "https://github.com/dangmai/volo-appcache/tarball/master"
   }
 }
