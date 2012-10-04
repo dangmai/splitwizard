@@ -51,12 +51,34 @@ define(function (require) {
             }
         },
 
-        appcache: require('volo-appcache')({
+        'appcache-build-manifest': require('volo-appcache')({
             depends: [],
             dir: 'www-built',
             htmlPath: 'index.html',
             manifestTemplate: ''
         }),
+
+        /**
+         * Because of our cache bursting strategy, volo-appcache won't cache
+         * the correct static assets (as they need to be prepended with the
+         * version number), so this is a necessary step to fix those assets'
+         * paths.
+         */
+        appcache: {
+            depends: ['appcache-build-manifest'],
+
+            run: function(d, v, namedArgs) {
+                var fileContent = v.read('www-built/manifest.appcache'),
+                    version = JSON.parse(v.read('package.json')).version;
+                fileContent = fileContent.replace(/(.*?)(css|js|img)([\\/])(.+)/g,
+                    function (match, path, folder, sep, rest) {
+                        return path.concat("static", sep, "v", version, sep,
+                            folder, sep, rest);
+                    });
+                v.write('www-built/manifest.appcache', fileContent);
+                d.resolve("AppCache preparation completed");
+            }
+        },
 
         build: {
             depends: ['optimize', 'versionify', 'clean', 'appcache'],
