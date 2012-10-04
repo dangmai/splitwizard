@@ -93,18 +93,42 @@ define(function (require) {
          * Because of our cache bursting strategy, volo-appcache won't cache
          * the correct static assets (as they need to be prepended with the
          * version number), so this is a necessary step to fix those assets'
-         * paths.
+         * paths. Also, any files that are not necessary can be removed here.
          */
         appcache: {
             depends: ['appcache-build-manifest'],
 
             run: function(d, v, namedArgs) {
                 var fileContent = v.read('www-built/manifest.appcache'),
-                    version = JSON.parse(v.read('package.json')).version;
+                    version = JSON.parse(v.read('package.json')).version,
+                    filesToRemove,
+                    removeRegExPattern = "(";
+                filesToRemove = [
+                    "404.html",
+                    "humans.txt",
+                    "robots.txt",
+                    "404-confused-wizard.jpg"
+                ],
+                // Correct static assets' paths
                 fileContent = fileContent.replace(/(.*?)(css|js|img)([\\/])(.+)/g,
                     function (match, path, folder, sep, rest) {
                         return path.concat("static", sep, "v", version, sep,
                             folder, sep, rest);
+                    });
+
+                // Remove unnecessary files
+                filesToRemove.forEach(function (file, index) {
+                    removeRegExPattern += "(^.*)" + escape(file) + "\\n";
+                    if (index !== filesToRemove.length - 1) {
+                        removeRegExPattern += "|";
+                    }
+                });
+                removeRegExPattern += ")";
+                // The RegEx needs to be in multi-line mode, so that ^ matches
+                // the start of the line, and global mode to find all the files.
+                fileContent = fileContent.replace(new RegExp(removeRegExPattern, "gm"),
+                    function (match, line) {
+                        return "";
                     });
                 v.write('www-built/manifest.appcache', fileContent);
                 d.resolve("AppCache preparation completed");
