@@ -43,13 +43,10 @@ define(function (require) {
 
         clean: {
             run: function(d, v, namedArgs) {
+                // Be careful not to remove all the libs, as we still need to
+                // cache them for AppCache functionality.
                 v.rm('www-built/js/app');
                 v.rm('www-built/build.txt');
-                // Hackish, but better than manually removing files
-                v.mv('www-built/js/lib/require.js', 'www-built/js/require.temp.js');
-                v.rm('www-built/js/lib');
-                v.mkdir('www-built/js/lib');
-                v.mv('www-built/js/require.temp.js', 'www-built/js/lib/require.js');
                 d.resolve("Clean completed");
             }
         },
