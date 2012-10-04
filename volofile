@@ -44,9 +44,40 @@ define(function (require) {
         clean: {
             run: function(d, v, namedArgs) {
                 // Be careful not to remove all the libs, as we still need to
-                // cache them for AppCache functionality.
+                // cache them for AppCache functionality. Basically, all scripts
+                // that reside on the CDN need to be cached as well.
+
+                var escape = function(s) {
+                    // Escape string to be used in JS regex. Code from:
+                    // http://stackoverflow.com/questions/3561493
+                    return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')
+                },
+                    excludePattern = "(",
+                    fullFilePaths,
+                    filesToSave = [
+                        "require.js",
+                        "jquery.js",
+                        "moment.js",
+                        "Modernizr.js",
+                        "json2.js",
+                        "jquery.validate.js"
+                    ];
                 v.rm('www-built/js/app');
                 v.rm('www-built/build.txt');
+
+                filesToSave.forEach(function (file, index) {
+                    excludePattern += escape(file);
+                    if (index !== filesToSave.length - 1) {
+                        excludePattern += "|";
+                    }
+                });
+                excludePattern += ")";
+                fullFilePaths = v.getFilteredFileList("www-built/js/lib", /./,
+                    new RegExp(excludePattern));
+                fullFilePaths.forEach(function (file) {
+                    v.rm(file);
+                    console.log("Removed file " + file);
+                });
                 d.resolve("Clean completed");
             }
         },
