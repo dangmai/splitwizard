@@ -55,12 +55,7 @@ define(function (require) {
                     excludePattern = "(",
                     fullFilePaths,
                     filesToSave = [
-                        "require.js",
-                        "jquery.js",
-                        "moment.js",
-                        "Modernizr.js",
-                        "json2.js",
-                        "jquery.validate.js"
+                        "require.js"
                     ];
                 v.rm('www-built/js/app');
                 v.rm('www-built/build.txt');
@@ -86,7 +81,21 @@ define(function (require) {
             depends: [],
             dir: 'www-built',
             htmlPath: 'index.html',
-            manifestTemplate: ''
+            manifestTemplate: '',
+            extras: [
+                'http://cdnjs.cloudflare.com/ajax/libs/jquery/1.8.2/jquery.min.js',
+                'http://cdnjs.cloudflare.com/ajax/libs/moment.js/1.7.0/moment.min.js',
+                'http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js',
+                'http://cdnjs.cloudflare.com/ajax/libs/json2/20110223/json2.js',
+                'http://ajax.aspnetcdn.com/ajax/jquery.validate/1.10.0/jquery.validate.min.js',
+                // At the moment, the fonts DO NOT work!
+                // BootstrapCDN uses HTTPS for its fonts, so they can't be cached
+                // Google Font serves its CSS based on the browser, so it's hard
+                // to get all the fonts' URLs (and also, they may change in the
+                // future).
+                // Therefore, we only include the bootstrap css here.
+                'http://netdna.bootstrapcdn.com/twitter-bootstrap/2.1.1/css/bootstrap.no-icons.min.css'
+            ]
         }),
 
         /**
@@ -110,8 +119,13 @@ define(function (require) {
                     "404-confused-wizard.jpg"
                 ],
                 // Correct static assets' paths
-                fileContent = fileContent.replace(/(.*?)(css|js|img)([\\/])(.+)/g,
-                    function (match, path, folder, sep, rest) {
+                //fileContent = fileContent.replace(/(.*?)(css|js|img)([\\/])(.+)/g,
+                fileContent = fileContent.replace(/(http)*(.*?)(css|js|img)([\\/])(.+)/g,
+                    function (match, absolute, path, folder, sep, rest) {
+                        if (absolute) {
+                            // if this is an absolute URL, don't alter anything.
+                            return absolute.concat(path, folder, sep, rest);
+                        }
                         return path.concat("static", sep, "v", version, sep,
                             folder, sep, rest);
                     });
