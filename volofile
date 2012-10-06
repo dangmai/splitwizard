@@ -1,175 +1,172 @@
-/*global define, console, process */
+/*jslint node: true */
+'use strict';
 
-define(function (require) {
-    'use strict';
+module.exports = {
+    optimize: {
+        flags: {
+            //Does not print the build output.
+            'q': 'quiet'
+        },
 
-    return {
-        optimize: {
-            flags: {
-                //Does not print the build output.
-                'q': 'quiet'
+        run: function (d, v, namedArgs) {
+            //Remove the old dir
+            v.rm('www-built');
+
+            d.resolve(v.spawn('node', ['tools/r.js', '-o', 'tools/build.js'], {
+                useConsole: !namedArgs.quiet
+            }));
+        }
+    },
+
+    versionify: {
+        run: function(d, v, namedArgs) {
+            var files = [
+                'index.html',
+                '404.html',
+                'js/app.js'
+            ],
+                fileContent,
+                version = JSON.parse(v.read('package.json')).version;
+            files = files.map(function (file) {
+                return 'www-built/' + file;
+            });
+            files.forEach(function (file) {
+                fileContent = v.read(file);
+                fileContent = fileContent.replace(/v\.placeholder/g, 'v'+version);
+                v.write(file, fileContent);
+            });
+            d.resolve("Versionify completed");
+        }
+    },
+
+    clean: {
+        run: function(d, v, namedArgs) {
+            // Be careful not to remove all the libs, as we still need to
+            // cache them for AppCache functionality. Basically, all scripts
+            // that reside on the CDN need to be cached as well.
+
+            var escape = function(s) {
+                // Escape string to be used in JS regex. Code from:
+                // http://stackoverflow.com/questions/3561493
+                return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')
             },
+                excludePattern = "(",
+                fullFilePaths,
+                filesToSave = [
+                    "require.js"
+                ];
+            v.rm('www-built/js/app');
+            v.rm('www-built/build.txt');
 
-            run: function (d, v, namedArgs) {
-                //Remove the old dir
-                v.rm('www-built');
+            filesToSave.forEach(function (file, index) {
+                excludePattern += escape(file);
+                if (index !== filesToSave.length - 1) {
+                    excludePattern += "|";
+                }
+            });
+            excludePattern += ")";
+            fullFilePaths = v.getFilteredFileList("www-built/js/lib", /./,
+                new RegExp(excludePattern));
+            fullFilePaths.forEach(function (file) {
+                v.rm(file);
+                console.log("Removed file " + file);
+            });
+            d.resolve("Clean completed");
+        }
+    },
 
-                d.resolve(v.spawn('node', ['tools/r.js', '-o', 'tools/build.js'], {
-                    useConsole: !namedArgs.quiet
-                }));
-            }
-        },
+    'appcache-build-manifest': require('volo-appcache')({
+        depends: [],
+        dir: 'www-built',
+        htmlPath: 'index.html',
+        manifestTemplate: '',
+        extras: [
+            'http://cdnjs.cloudflare.com/ajax/libs/jquery/1.8.2/jquery.min.js',
+            'http://cdnjs.cloudflare.com/ajax/libs/moment.js/1.7.0/moment.min.js',
+            'http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js',
+            'http://cdnjs.cloudflare.com/ajax/libs/json2/20110223/json2.js',
+            'http://ajax.aspnetcdn.com/ajax/jquery.validate/1.10.0/jquery.validate.min.js',
+            // At the moment, the fonts DO NOT work!
+            // BootstrapCDN uses HTTPS for its fonts, so they can't be cached
+            // Google Font serves its CSS based on the browser, so it's hard
+            // to get all the fonts' URLs (and also, they may change in the
+            // future).
+            // Therefore, we only include the bootstrap css here.
+            'http://netdna.bootstrapcdn.com/twitter-bootstrap/2.1.1/css/bootstrap.no-icons.min.css'
+        ]
+    }),
 
-        versionify: {
-            run: function(d, v, namedArgs) {
-                var files = [
-                    'index.html',
-                    '404.html',
-                    'js/app.js'
-                ],
-                    fileContent,
-                    version = JSON.parse(v.read('package.json')).version;
-                files = files.map(function (file) {
-                    return 'www-built/' + file;
-                });
-                files.forEach(function (file) {
-                    fileContent = v.read(file);
-                    fileContent = fileContent.replace(/v\.placeholder/g, 'v'+version);
-                    v.write(file, fileContent);
-                });
-                d.resolve("Versionify completed");
-            }
-        },
+    /**
+     * Because of our cache bursting strategy, volo-appcache won't cache
+     * the correct static assets (as they need to be prepended with the
+     * version number), so this is a necessary step to fix those assets'
+     * paths. Also, any files that are not necessary can be removed here.
+     */
+    appcache: {
+        depends: ['appcache-build-manifest'],
 
-        clean: {
-            run: function(d, v, namedArgs) {
-                // Be careful not to remove all the libs, as we still need to
-                // cache them for AppCache functionality. Basically, all scripts
-                // that reside on the CDN need to be cached as well.
-
-                var escape = function(s) {
-                    // Escape string to be used in JS regex. Code from:
-                    // http://stackoverflow.com/questions/3561493
-                    return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')
-                },
-                    excludePattern = "(",
-                    fullFilePaths,
-                    filesToSave = [
-                        "require.js"
-                    ];
-                v.rm('www-built/js/app');
-                v.rm('www-built/build.txt');
-
-                filesToSave.forEach(function (file, index) {
-                    excludePattern += escape(file);
-                    if (index !== filesToSave.length - 1) {
-                        excludePattern += "|";
+        run: function(d, v, namedArgs) {
+            var fileContent = v.read('www-built/manifest.appcache'),
+                version = JSON.parse(v.read('package.json')).version,
+                filesToRemove,
+                removeRegExPattern = "(";
+            filesToRemove = [
+                "404.html",
+                "humans.txt",
+                "robots.txt",
+                "404-confused-wizard.jpg"
+            ],
+            // Correct static assets' paths
+            //fileContent = fileContent.replace(/(.*?)(css|js|img)([\\/])(.+)/g,
+            fileContent = fileContent.replace(/(http)*(.*?)(css|js|img)([\\/])(.+)/g,
+                function (match, absolute, path, folder, sep, rest) {
+                    if (absolute) {
+                        // if this is an absolute URL, don't alter anything.
+                        return absolute.concat(path, folder, sep, rest);
                     }
+                    return path.concat("static", sep, "v", version, sep,
+                        folder, sep, rest);
                 });
-                excludePattern += ")";
-                fullFilePaths = v.getFilteredFileList("www-built/js/lib", /./,
-                    new RegExp(excludePattern));
-                fullFilePaths.forEach(function (file) {
-                    v.rm(file);
-                    console.log("Removed file " + file);
-                });
-                d.resolve("Clean completed");
-            }
-        },
 
-        'appcache-build-manifest': require('volo-appcache')({
-            depends: [],
-            dir: 'www-built',
-            htmlPath: 'index.html',
-            manifestTemplate: '',
-            extras: [
-                'http://cdnjs.cloudflare.com/ajax/libs/jquery/1.8.2/jquery.min.js',
-                'http://cdnjs.cloudflare.com/ajax/libs/moment.js/1.7.0/moment.min.js',
-                'http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js',
-                'http://cdnjs.cloudflare.com/ajax/libs/json2/20110223/json2.js',
-                'http://ajax.aspnetcdn.com/ajax/jquery.validate/1.10.0/jquery.validate.min.js',
-                // At the moment, the fonts DO NOT work!
-                // BootstrapCDN uses HTTPS for its fonts, so they can't be cached
-                // Google Font serves its CSS based on the browser, so it's hard
-                // to get all the fonts' URLs (and also, they may change in the
-                // future).
-                // Therefore, we only include the bootstrap css here.
-                'http://netdna.bootstrapcdn.com/twitter-bootstrap/2.1.1/css/bootstrap.no-icons.min.css'
-            ]
-        }),
+            // Remove unnecessary files
+            filesToRemove.forEach(function (file, index) {
+                removeRegExPattern += "(^.*)" + escape(file) + "\\n";
+                if (index !== filesToRemove.length - 1) {
+                    removeRegExPattern += "|";
+                }
+            });
+            removeRegExPattern += ")";
+            // The RegEx needs to be in multi-line mode, so that ^ matches
+            // the start of the line, and global mode to find all the files.
+            fileContent = fileContent.replace(new RegExp(removeRegExPattern, "gm"),
+                function (match, line) {
+                    return "";
+                });
+            v.write('www-built/manifest.appcache', fileContent);
+            d.resolve("AppCache preparation completed");
+        }
+    },
+
+    build: {
+        depends: ['optimize', 'versionify', 'clean', 'appcache'],
 
         /**
-         * Because of our cache bursting strategy, volo-appcache won't cache
-         * the correct static assets (as they need to be prepended with the
-         * version number), so this is a necessary step to fix those assets'
-         * paths. Also, any files that are not necessary can be removed here.
+         * Build the site.
+         * @param {String} folderLocation the relative path to the server
+         * root of the website. If this is not setup correctly, the 404
+         * page will not be used. Default: '/splitwizard/www-built/'.
          */
-        appcache: {
-            depends: ['appcache-build-manifest'],
-
-            run: function(d, v, namedArgs) {
-                var fileContent = v.read('www-built/manifest.appcache'),
-                    version = JSON.parse(v.read('package.json')).version,
-                    filesToRemove,
-                    removeRegExPattern = "(";
-                filesToRemove = [
-                    "404.html",
-                    "humans.txt",
-                    "robots.txt",
-                    "404-confused-wizard.jpg"
-                ],
-                // Correct static assets' paths
-                //fileContent = fileContent.replace(/(.*?)(css|js|img)([\\/])(.+)/g,
-                fileContent = fileContent.replace(/(http)*(.*?)(css|js|img)([\\/])(.+)/g,
-                    function (match, absolute, path, folder, sep, rest) {
-                        if (absolute) {
-                            // if this is an absolute URL, don't alter anything.
-                            return absolute.concat(path, folder, sep, rest);
-                        }
-                        return path.concat("static", sep, "v", version, sep,
-                            folder, sep, rest);
-                    });
-
-                // Remove unnecessary files
-                filesToRemove.forEach(function (file, index) {
-                    removeRegExPattern += "(^.*)" + escape(file) + "\\n";
-                    if (index !== filesToRemove.length - 1) {
-                        removeRegExPattern += "|";
-                    }
-                });
-                removeRegExPattern += ")";
-                // The RegEx needs to be in multi-line mode, so that ^ matches
-                // the start of the line, and global mode to find all the files.
-                fileContent = fileContent.replace(new RegExp(removeRegExPattern, "gm"),
-                    function (match, line) {
-                        return "";
-                    });
-                v.write('www-built/manifest.appcache', fileContent);
-                d.resolve("AppCache preparation completed");
+        run: function(d, v, namedArgs, folderLocation) {
+            var fileContent;
+            if (!folderLocation) {
+                folderLocation = '/splitwizard/www-built/';
             }
-        },
+            fileContent = v.read('www-built/.htaccess');
+            fileContent = fileContent.replace(/404 \/splitwizard\/www\//,
+                "404 " + folderLocation);
+            v.write('www-built/.htaccess', fileContent);
 
-        build: {
-            depends: ['optimize', 'versionify', 'clean', 'appcache'],
-
-            /**
-             * Build the site.
-             * @param {String} folderLocation the relative path to the server
-             * root of the website. If this is not setup correctly, the 404
-             * page will not be used. Default: '/splitwizard/www-built/'.
-             */
-            run: function(d, v, namedArgs, folderLocation) {
-                var fileContent;
-                if (!folderLocation) {
-                    folderLocation = '/splitwizard/www-built/';
-                }
-                fileContent = v.read('www-built/.htaccess');
-                fileContent = fileContent.replace(/404 \/splitwizard\/www\//,
-                    "404 " + folderLocation);
-                v.write('www-built/.htaccess', fileContent);
-
-                d.resolve("Build completed");
-            }
+            d.resolve("Build completed");
         }
     }
-});
+};
