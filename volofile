@@ -1,5 +1,20 @@
-/*jslint node: true */
+/*jslint node: true*/
 'use strict';
+
+/**
+ * Insert some string into another string at a specified position.
+ * @param originalContent the original string.
+ * @param insertContent what to insert.
+ * @param insertPosition where to insert.
+ * @return the new string.
+ */
+var insertAt = function (originalContent, insertContent, insertPosition) {
+    return [
+        originalContent.slice(0, insertPosition),
+        insertContent,
+        originalContent.slice(insertPosition)
+    ].join('');
+};
 
 module.exports = {
     optimize: {
@@ -31,13 +46,10 @@ module.exports = {
             filesToTrack.forEach(function (file) {
                 fileContent = v.read(file);
                 insertPosition = fileContent.search(/<\/head>/);
-                fileContent = [
-                    fileContent.slice(0, insertPosition),
+                fileContent = insertAt(fileContent,
                     Mustache.render(trackingScriptTmpl, {
                         trackingId: 'UA-35365849-1'
-                    }),
-                    fileContent.slice(insertPosition)
-                ].join('');
+                    }), insertPosition);
                 v.write(file, fileContent);
             });
             d.resolve("Tracking files added");
@@ -45,7 +57,7 @@ module.exports = {
     },
 
     versionify: {
-        run: function(d, v, namedArgs) {
+        run: function (d, v, namedArgs) {
             var files = [
                 'index.html',
                 '404.html',
@@ -58,7 +70,7 @@ module.exports = {
             });
             files.forEach(function (file) {
                 fileContent = v.read(file);
-                fileContent = fileContent.replace(/v\.placeholder/g, 'v'+version);
+                fileContent = fileContent.replace(/v\.placeholder/g, 'v' + version);
                 v.write(file, fileContent);
             });
             d.resolve("Versionify completed");
@@ -66,15 +78,15 @@ module.exports = {
     },
 
     clean: {
-        run: function(d, v, namedArgs) {
+        run: function (d, v, namedArgs) {
             // Be careful not to remove all the libs, as we still need to
             // cache them for AppCache functionality. Basically, all scripts
             // that reside on the CDN need to be cached as well.
 
-            var escape = function(s) {
+            var escape = function (s) {
                 // Escape string to be used in JS regex. Code from:
                 // http://stackoverflow.com/questions/3561493
-                return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')
+                return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
             },
                 excludePattern = "(",
                 fullFilePaths,
@@ -91,7 +103,7 @@ module.exports = {
                 }
             });
             excludePattern += ")";
-            fullFilePaths = v.getFilteredFileList("www-built/js/lib", /./,
+            fullFilePaths = v.getFilteredFileList("www-built/js/lib", null,
                 new RegExp(excludePattern));
             fullFilePaths.forEach(function (file) {
                 v.rm(file);
@@ -112,15 +124,62 @@ module.exports = {
             'http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js',
             'http://cdnjs.cloudflare.com/ajax/libs/json2/20110223/json2.js',
             'http://ajax.aspnetcdn.com/ajax/jquery.validate/1.10.0/jquery.validate.min.js',
-            // At the moment, the fonts DO NOT work!
-            // BootstrapCDN uses HTTPS for its fonts, so they can't be cached
-            // Google Font serves its CSS based on the browser, so it's hard
-            // to get all the fonts' URLs (and also, they may change in the
-            // future).
-            // Therefore, we only include the bootstrap css here.
-            'http://netdna.bootstrapcdn.com/twitter-bootstrap/2.1.1/css/bootstrap.no-icons.min.css'
+            'http://netdna.bootstrapcdn.com/twitter-bootstrap/2.1.1/css/bootstrap.no-icons.min.css',
+            'http://fonts.googleapis.com/css?family=Lobster|Cabin',
+            'http://netdna.bootstrapcdn.com/font-awesome/2.0/css/font-awesome-protocol-less.css',
+            'http://netdna.bootstrapcdn.com/font-awesome/2.0/css/font-awesome-ie7.css'
         ]
     }),
+
+    'appcache-add-google-fonts': {
+        /**
+         * Add Google Webfonts' locations to the manifest files. It is really
+         * hard to add these to `extras` params for volo-appcache, as that
+         * param is initialized right when this file is parsed, while scraping
+         * Google CSS takes some time.
+         */
+        run: function (d, v, namedArgs) {
+            var file = 'www-built/manifest.appcache',
+                fileContent = v.read(file),
+                insertPosition = fileContent.search(/CACHE:\n/) + 7;
+
+            require('google-fonts-scraper')('http://fonts.googleapis.com/css?family=Lobster|Cabin')
+                .then(function (fontUrls) {
+                    fileContent = insertAt(fileContent,
+                        fontUrls.join('\n') + '\n', insertPosition);
+                    v.write(file, fileContent);
+                    d.resolve('Fonts scraped and added');
+                }, function (err) {
+                    d.reject(err);
+                });
+        }
+    },
+
+    'appcache-add-font-awesome-fonts': {
+        /**
+         * Add FontAwesome font locations to the manifest files.
+         */
+        run: function (d, v, namedArgs) {
+            var request = require('request');
+            request('http://netdna.bootstrapcdn.com/font-awesome/2.0/css/font-awesome-protocol-less.css',
+                function (error, response, body) {
+                    if (error) {
+                        d.reject(new Error(error));
+                    } else if (response.statusCode !== 200) {
+                        d.reject(new Error("Server returns status code " + response.statusCode));
+                    } else {
+                        var fontUrls = body.match(/\/\/[a-zA-Z0-9\/._\-]+/g),
+                            file = 'www-built/manifest.appcache',
+                            fileContent = v.read(file),
+                            insertPosition = fileContent.search(/CACHE:\n/) + 7;
+                        fileContent = insertAt(fileContent,
+                            fontUrls.join('\n') + '\n', insertPosition);
+                        v.write(file, fileContent);
+                        d.resolve("Font Awesome added");
+                    }
+                });
+        }
+    },
 
     /**
      * Because of our cache bursting strategy, volo-appcache won't cache
@@ -129,10 +188,15 @@ module.exports = {
      * paths. Also, any files that are not necessary can be removed here.
      */
     appcache: {
-        depends: ['appcache-build-manifest'],
+        depends: ['appcache-build-manifest', 'appcache-add-google-fonts', 'appcache-add-font-awesome-fonts'],
 
-        run: function(d, v, namedArgs) {
-            var fileContent = v.read('www-built/manifest.appcache'),
+        run: function (d, v, namedArgs) {
+            var escape = function (s) {
+                // Escape string to be used in JS regex. Code from:
+                // http://stackoverflow.com/questions/3561493
+                return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+            },
+                fileContent = v.read('www-built/manifest.appcache'),
                 version = JSON.parse(v.read('package.json')).version,
                 filesToRemove,
                 removeRegExPattern = "(";
@@ -141,7 +205,7 @@ module.exports = {
                 "humans.txt",
                 "robots.txt",
                 "404-confused-wizard.jpg"
-            ],
+            ];
             // Correct static assets' paths
             //fileContent = fileContent.replace(/(.*?)(css|js|img)([\\/])(.+)/g,
             fileContent = fileContent.replace(/(http)*(.*?)(css|js|img)([\\/])(.+)/g,
@@ -182,7 +246,7 @@ module.exports = {
          * root of the website. If this is not setup correctly, the 404
          * page will not be used. Default: '/splitwizard/www-built/'.
          */
-        run: function(d, v, namedArgs, folderLocation) {
+        run: function (d, v, namedArgs, folderLocation) {
             var fileContent;
             if (!folderLocation) {
                 folderLocation = '/splitwizard/www-built/';
