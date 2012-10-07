@@ -1,6 +1,6 @@
 {
   "name": "SplitWizard",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "author": "Dang Mai <contact@dangmai.net>",
   "description": "a simple bill splitter",
   "license": "MIT",
@@ -29,7 +29,11 @@
     "mocha": "*",
     "requirejs": "*",
     "mocha-phantomjs": "https://github.com/metaskills/mocha-phantomjs/tarball/master",
+    "mustache": "*",
+    "underscore": "*",
     "volo": "*",
-    "volo-appcache": "https://github.com/dangmai/volo-appcache/tarball/true-master"
+    "volo-appcache": "https://github.com/dangmai/volo-appcache/tarball/true-master",
+    "google-fonts-scraper": "https://github.com/dangmai/google-fonts-scraper/tarball/master",
+    "request": "*"
   }
 }
