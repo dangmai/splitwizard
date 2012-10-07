@@ -29,6 +29,7 @@
     "mocha": "*",
     "requirejs": "*",
     "mocha-phantomjs": "https://github.com/metaskills/mocha-phantomjs/tarball/master",
+    "mustache": "*",
     "volo": "*",
     "volo-appcache": "https://github.com/dangmai/volo-appcache/tarball/true-master"
   }

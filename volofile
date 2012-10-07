@@ -18,6 +18,31 @@ module.exports = {
         }
     },
 
+    tracking: {
+        run: function (d, v, namedArgs) {
+            var filesToTrack = [
+                    'www-built/index.html',
+                    'www-built/404.html'
+                ],
+                Mustache = require('mustache'),
+                trackingScriptTmpl = v.read('www/js/app/templates/tracking.html'),
+                fileContent,
+                insertPosition;
+            filesToTrack.forEach(function (file) {
+                fileContent = v.read(file);
+                insertPosition = fileContent.search(/<\/head>/);
+                fileContent = [
+                    fileContent.slice(0, insertPosition),
+                    Mustache.render(trackingScriptTmpl, {
+                        trackingId: 'UA-35365849-1'
+                    }),
+                    fileContent.slice(insertPosition)
+                ].join('');
+                v.write(file, fileContent);
+            });
+        }
+    },
+
     versionify: {
         run: function(d, v, namedArgs) {
             var files = [
@@ -148,7 +173,7 @@ module.exports = {
     },
 
     build: {
-        depends: ['optimize', 'versionify', 'clean', 'appcache'],
+        depends: ['optimize', 'versionify', 'tracking', 'clean', 'appcache'],
 
         /**
          * Build the site.
