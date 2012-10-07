@@ -45,7 +45,7 @@ module.exports = {
                 insertPosition;
             filesToTrack.forEach(function (file) {
                 fileContent = v.read(file);
-                insertPosition = fileContent.search(/<\/head>/);
+                insertPosition = fileContent.search(/<\/body>/);
                 fileContent = insertAt(fileContent,
                     Mustache.render(trackingScriptTmpl, {
                         trackingId: 'UA-35365849-1'
@@ -127,7 +127,8 @@ module.exports = {
             'http://netdna.bootstrapcdn.com/twitter-bootstrap/2.1.1/css/bootstrap.no-icons.min.css',
             'http://fonts.googleapis.com/css?family=Lobster|Cabin',
             'http://netdna.bootstrapcdn.com/font-awesome/2.0/css/font-awesome-protocol-less.css',
-            'http://netdna.bootstrapcdn.com/font-awesome/2.0/css/font-awesome-ie7.css'
+            'http://netdna.bootstrapcdn.com/font-awesome/2.0/css/font-awesome-ie7.css',
+            'http://www.google-analytics.com/ga.js'
         ]
     }),
 

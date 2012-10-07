@@ -5,7 +5,7 @@
 	define(['app/split', 'app/model', 'app/util', 'mustache',
 		'text!app/templates/form.html', 'text!app/templates/bill-row.html',
 		'text!app/templates/person-row.html', 'text!app/templates/result.html',
-		'jquery', 'jquery.validate', 'jquery.cookie', 'domReady!', 'json2',
+		'jquery', 'jquery.validate', 'jquery.cookie', 'json2',
 		'bootstrap-datepicker', 'Modernizr'],
 		function (split, model, util, Mustache, formTemplateSrc, billRowSrc,
 			personRowSrc, resultSrc, $) {
