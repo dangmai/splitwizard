@@ -5,6 +5,12 @@
   "description": "a simple bill splitter",
   "license": "MIT",
   "amd": {},
+  "scripts": {
+    "build": "volo build /scriptwizard/"
+  },
+  "engines": {
+    "node": "<0.11"
+  },
   "volo": {
     "baseUrl": "www/js/lib",
     "dependencies": {
@@ -25,15 +31,15 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "chai": "*",
-    "mocha": "*",
-    "requirejs": "*",
+    "chai": "3.5.0",
+    "mocha": "2.4.5",
+    "requirejs": "2.1.22",
     "mocha-phantomjs": "https://github.com/metaskills/mocha-phantomjs/tarball/master",
-    "mustache": "*",
-    "underscore": "*",
-    "volo": "*",
+    "mustache": "2.2.1",
+    "underscore": "1.8.3",
+    "volo": "0.3.6",
     "volo-appcache": "https://github.com/dangmai/volo-appcache/tarball/true-master",
     "google-fonts-scraper": "https://github.com/dangmai/google-fonts-scraper/tarball/master",
-    "request": "*"
+    "request": "2.69.0"
   }
 }
