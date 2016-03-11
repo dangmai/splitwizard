@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/dangmai/splitwizard.png)](https://travis-ci.org/dangmai/splitwizard)
+
+
 #About
 The source code for [SplitWizard](http://splitwizard.com). This is the project I use to incorporate all the knowledge about modern Javascript that I learn so far, so there are bound to be issues. Feel free to fork and submit pull requests.
 
