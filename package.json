@@ -8,9 +8,6 @@
   "scripts": {
     "build": "volo build /scriptwizard/"
   },
-  "engines": {
-    "node": "<0.11"
-  },
   "volo": {
     "baseUrl": "www/js/lib",
     "dependencies": {
@@ -37,7 +34,7 @@
     "mocha-phantomjs": "https://github.com/metaskills/mocha-phantomjs/tarball/master",
     "mustache": "2.2.1",
     "underscore": "1.8.3",
-    "volo": "0.3.6",
+    "volo": "0.3.7",
     "volo-appcache": "https://github.com/dangmai/volo-appcache/tarball/true-master",
     "google-fonts-scraper": "https://github.com/dangmai/google-fonts-scraper/tarball/master",
     "request": "2.69.0"
