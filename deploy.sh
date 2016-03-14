@@ -4,7 +4,7 @@ set -u
 set -e
 set -v
 
-DOWNLOAD_DIR="/home/dangmai/Downloads/builds"
+DOWNLOAD_DIR="/tmp"
 REPO="dangmai/splitwizard"  # this must be the same as the tag from Rockerfile
 mkdir -p $DOWNLOAD_DIR
 cd $DOWNLOAD_DIR
