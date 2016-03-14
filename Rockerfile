@@ -14,7 +14,7 @@ IMPORT /www-built
 RUN apk --update add apache2 \
     && rm -rf /var/cache/apk/*
 
-RUN sed -i '1s/^/ServerName dangmai.net:80 \r\n\r\n/' /etc/apache2/httpd.conf
+RUN sed -i '1s/^/ServerName splitwizard.com:80 \r\n\r\n/' /etc/apache2/httpd.conf
 RUN sed -i '/<Directory "\/var\/www\/localhost\/htdocs">/,/<\/Directory>/ s/AllowOverride None/AllowOverride All/' /etc/apache2/httpd.conf
 RUN sed -i 's/#LoadModule rewrite_module/LoadModule rewrite_module/' /etc/apache2/httpd.conf
 RUN rm -rf /var/www/localhost/htdocs/* \
