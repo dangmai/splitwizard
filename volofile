@@ -243,20 +243,8 @@ module.exports = {
 
         /**
          * Build the site.
-         * @param {String} folderLocation the relative path to the server
-         * root of the website. If this is not setup correctly, the 404
-         * page will not be used. Default: '/splitwizard/www-built/'.
          */
-        run: function (d, v, namedArgs, folderLocation) {
-            var fileContent;
-            if (!folderLocation) {
-                folderLocation = '/splitwizard/www-built/';
-            }
-            fileContent = v.read('www-built/.htaccess');
-            fileContent = fileContent.replace(/404 \/splitwizard\/www\//,
-                "404 " + folderLocation);
-            v.write('www-built/.htaccess', fileContent);
-
+        run: function (d, v, namedArgs) {
             d.resolve("Build completed");
         }
     }

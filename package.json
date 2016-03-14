@@ -6,7 +6,7 @@
   "license": "MIT",
   "amd": {},
   "scripts": {
-    "build": "volo build /scriptwizard/",
+    "build": "volo build",
     "test": "mocha-phantomjs www/js/app/test/runner.html"
   },
   "volo": {
