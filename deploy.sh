@@ -23,7 +23,7 @@ curl -o cf.tgz -L 'https://cli.run.pivotal.io/stable?release=linux64-binary&vers
 tar xvfz cf.tgz
 ./cf install-plugin -f https://static-ice.ng.bluemix.net/ibm-containers-linux_x64
 # Push to private repo
-./cf login -u $BLUEMIX_USERNAME -p $BLUEMIX_PASSWORD
+./cf login -u $BLUEMIX_USERNAME -p $BLUEMIX_PASSWORD -a api.ng.bluemix.net
 ./cf ic cpi $REPO:latest registry.ng.bluemix.net/$REPO:latest
 OLD_CONTAINER_NAME=`./cf ic ps | grep -oE '[^ ]+$' | grep splitwizard.* | cat`
 NEW_CONTAINER_NAME="splitwizard.`date +%s`"
