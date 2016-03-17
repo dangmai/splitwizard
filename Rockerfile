@@ -26,4 +26,4 @@ ENTRYPOINT ["httpd"]
 CMD ["-D", "FOREGROUND"]
 EXPOSE 80
 
-TAG dangmai/splitwizard
+TAG dangmai/splitwizard:latest
