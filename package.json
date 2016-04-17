@@ -38,6 +38,6 @@
     "volo": "0.3.7",
     "volo-appcache": "https://github.com/dangmai/volo-appcache/tarball/true-master",
     "google-fonts-scraper": "https://github.com/dangmai/google-fonts-scraper/tarball/master",
-    "request": "2.71.0"
+    "request": "2.72.0"
   }
 }
