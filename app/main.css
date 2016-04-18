@@ -1,10 +1,12 @@
-@import url("../js/lib/bootstrap-datepicker/css/datepicker.css");
+html {
+    font-size: 16px;
+}
 
 body {
     font-family: 'Cabin', Helvetica, Arial, sans-serif;
     font-size: 1em;
     line-height: 25px;
-    background-image: url('../img/grey.png');
+    background-image: url("./assets/grey.png");
 }
 h1, h2, h3, h4 {
     font-family: 'Lobster', Georgia, Times, serif;
