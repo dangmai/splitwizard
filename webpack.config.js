@@ -4,7 +4,7 @@ var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  entry: "./app/entry.js",
+  entry: "./src/entry.js",
   output: {
     path: "dist",
     filename: "index_bundle.js"
@@ -12,7 +12,7 @@ module.exports = {
   plugins: [
     new ExtractTextPlugin("main.css"),
     new HtmlWebpackPlugin({
-      template: "./app/index.html",
+      template: "./src/index.html",
       inject: "body"
     })
   ],
@@ -22,7 +22,7 @@ module.exports = {
       exclude: /node_modules/,
       loader: 'babel',
       query: {
-        "presets": ["es2015"]
+        "presets": ["es2015", "stage-2", "stage-1", "react"]
       }
     },
     {
