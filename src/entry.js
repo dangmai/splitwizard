@@ -9,33 +9,16 @@
 
 import React from "react"
 import ReactDOM from "react-dom"
-import injectTapEventPlugin from "react-tap-event-plugin";
-import lightBaseTheme from "material-ui/styles/baseThemes/lightBaseTheme";
-import getMuiTheme from "material-ui/styles/getMuiTheme";
 
 import { Provider } from "react-redux";
-import { People } from "./containers/People/index"
+import Form, { fields } from "./containers/form"
 import { store } from "./reducers/index"
 
-// Needed for onTouchTap 
-// http://stackoverflow.com/a/34015469/988941 
-injectTapEventPlugin();
-
 class App extends React.Component {
-  static childContextTypes = {
-    muiTheme: React.PropTypes.object
-  };
-
-  getChildContext() {
-    return {
-      muiTheme: getMuiTheme(lightBaseTheme)
-    }
-  }
-
   render() {
     return (
       <Provider store={store}>
-        <People people={store.getState().people} />
+        <Form fields={fields} onSubmit={() => { console.log(store.getState().form.appForm); }} />
       </Provider>
     );
   }
@@ -43,5 +26,5 @@ class App extends React.Component {
 
 ReactDOM.render(
   <App />,
-  document.getElementById("main-form")
+  document.getElementById("app")
 );

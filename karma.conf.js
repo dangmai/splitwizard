@@ -9,7 +9,7 @@ module.exports = (config) => {
       'tests/**/*.spec.js',
     ],
     preprocessors: {
-      'tests/**/*.spec.js': ['webpack'],
+      'tests/**/*.spec.js': ['webpack', 'sourcemap'],
     },
     webpack: {
       resolve: {
@@ -25,6 +25,7 @@ module.exports = (config) => {
           }
         }],
       },
+      devtool: 'inline-source-map',
     },
     webpackMiddleware: {
       stats: {
