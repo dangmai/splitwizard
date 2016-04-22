@@ -1,25 +1,25 @@
 import React, { Component, PropTypes } from "react";
 import { connect } from "react-redux";
-import math from "mathjs";
 
 import { Person, Bill } from "../models";
+import { calculate } from "../utils";
 
 class Result extends Component {
   render() {
-
+    return (
+      <div>
+        <ul>
+        {this.props.result.map((result, index) => (
+          <li key={index}>{result.name} owes {result.owedTotal}</li>
+        ))}
+        </ul>
+      </div>
+    );
   }
 }
 
-const calculateResult = (people, bills) => {
-  people = people.map((person) => {
-    return new Person(person.name, person.moveInDate, person.moveOutDate);
-  });
-  bills = bills.map((bill) => {
-    return new Bill(bill.name, bill.amount, bill.startDate, bill.endDate);
-  });
-};
-
 Result = connect(
-  state => calculateResult(state.form.appForm.people, state.form.appForm.bills)
+  state => ({ result: state.result })
 )(Result);
+
 export default Result;

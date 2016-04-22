@@ -1,5 +1,7 @@
 import React, { Component, PropTypes } from "react";
 import PureInput from "../components/pureInput";
+import Result from "./result";
+import { calculate } from "../actions/result";
 import {reduxForm} from "redux-form";
 
 export const fields = [
@@ -11,9 +13,14 @@ export const fields = [
   "bills[].startDate",
   "bills[].endDate"
 ];
-const formName = "appForm";
+export const formName = "appForm";
 
 class Form extends Component {
+  componentWillMount() {
+    this.props.fields.people.addField();
+    this.props.fields.bills.addField();
+  }
+
   render() {
     const {
       fields: { people, bills },
@@ -21,6 +28,7 @@ class Form extends Component {
     } = this.props;
     return (
       <form onSubmit={handleSubmit}>
+        <Result />
         <div>
           <button type="button" onClick={() => {
             people.addField();
@@ -74,10 +82,11 @@ Form.propTypes = {
   fields: PropTypes.object.isRequired,
   handleSubmit: PropTypes.func.isRequired,
 };
-
-Form = reduxForm({
-  form: formName,
-  fields,
-})(Form);
+Form = reduxForm(
+  {
+    form: formName,
+    fields,
+  },
+)(Form);
 
 export default Form;
