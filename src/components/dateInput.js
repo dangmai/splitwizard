@@ -7,8 +7,7 @@ import { dateFormat } from "../utils";
 
 export default class DateInput extends Component {
   shouldComponentUpdate(nextProps) {
-    //return this.props.field !== nextProps.field;
-    return true;
+    return this.props.field !== nextProps.field;
   }
 
   render() {
