@@ -36,6 +36,16 @@ const validate = values => {
     if (!bill.amount) {
       errs.amount = "Amount is required";
     }
+    if (!bill.startDate) {
+      errs.startDate = "Start Date is required";
+    } else if (!bill.startDate.isValid()) {
+      errs.startDate = "Start Date is invalid";
+    }
+    if (!bill.endDate) {
+      errs.endDate = "End Date is required";
+    } else if (!bill.endDate.isValid()) {
+      errs.endDate = "End Date is invalid";
+    }
     return errs;
   });
   return errors;
@@ -67,6 +77,7 @@ class Form extends Component {
         {people.map((person, index) => <div key={index}>
           <div>
             <label>Person #{index + 1}</label>
+            {index != 0 && <button type="button" onClick={() => people.removeField(index)}>Remove Person</button>}
             <div>
               <PureInput type="text" placeholder="Person Name" field={person.name} />
               {person.name.touched && person.name.error && <div>{person.name.error}</div>}
@@ -84,6 +95,7 @@ class Form extends Component {
         {bills.map((bill, index) => <div key={index}>
           <div>
             <label>Bill #{index + 1}</label>
+            {index != 0 && <button type="button" onClick={() => bills.removeField(index)}>Remove Bill</button>}
             <div>
               <PureInput type="text" placeholder="Bill Name" field={bill.name} />
               {bill.name.touched && bill.name.error && <div>{bill.name.error}</div>}
@@ -94,9 +106,11 @@ class Form extends Component {
             </div>
             <div>
               <DateInput placeholder="Start Date" field={bill.startDate} />
+              {bill.startDate.touched && bill.startDate.error && <div>{bill.startDate.error}</div>}
             </div>
             <div>
               <DateInput placeholder="End Date" field={bill.endDate} />
+              {bill.endDate.touched && bill.endDate.error && <div>{bill.endDate.error}</div>}
             </div>
           </div>
         </div>
