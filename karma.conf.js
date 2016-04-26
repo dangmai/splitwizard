@@ -17,6 +17,7 @@ module.exports = (config) => {
         modulesDirectories: ['node_modules', 'src'],
       },
       module: {
+        noParse: [/moment.js/],  // https://github.com/webpack/webpack/issues/198
         loaders: [{
           test: /\.js$/,
           loader: 'babel',

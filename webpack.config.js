@@ -17,6 +17,7 @@ module.exports = {
     })
   ],
   module: {
+    noParse: [/moment.js/],  // https://github.com/webpack/webpack/issues/198
     loaders: [{
       test: /\.js?$/,
       exclude: /node_modules/,
