@@ -7,4 +7,6 @@ export const rootReducer = combineReducers({
   result
 });
 
-export const store = createStore(rootReducer);
+export const store = createStore(rootReducer, undefined,
+  window.devToolsExtension ? window.devToolsExtension() : undefined
+);
