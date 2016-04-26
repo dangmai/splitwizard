@@ -10,49 +10,31 @@ import { dateFormat } from "./utils"
  * @param inDate the move in date
  * @param outDate the move out date
  */
-export function Person(name, inDate, outDate) {
-  this.name = name;
-  this.owedLineItems = [];
-  this.owedTotal = 0;
+export class Person {
+  constructor(name, inDate, outDate) {
+    this.name = name;
 
-  if (inDate && typeof inDate === 'string') {
-    this.in = moment(inDate, dateFormat);
-  } else if (inDate && typeof inDate === 'object') {
-    this.in = inDate;
-  } else {
-    this.in = moment("Jan 01, 1970", dateFormat);
+    if (inDate && typeof inDate === 'string') {
+      this.in = moment(inDate, dateFormat);
+    } else if (inDate && typeof inDate === 'object') {
+      this.in = inDate;
+    } else {
+      this.in = moment("Jan 01, 1970", dateFormat);
+    }
+    if (outDate && typeof outDate === 'string') {
+      this.out = moment(outDate, dateFormat);
+    } else if (outDate && typeof outDate === 'object') {
+      this.out = outDate;
+    } else {
+      this.out = moment("Dec 31, 3000", dateFormat);
+    }
+    this.range = moment().range(moment(this.in), moment(this.out));
   }
-  if (outDate && typeof outDate === 'string') {
-    this.out = moment(outDate, dateFormat);
-  } else if (outDate && typeof outDate === 'object') {
-    this.out = outDate;
-  } else {
-    this.out = moment("Dec 31, 3000", dateFormat);
+
+  toString() {
+    return this.name;
   }
-  this.range = moment().range(moment(this.in), moment(this.out));
 }
-
-Person.prototype.toString = function() {
-  return this.name;
-};
-
-Person.prototype.addAmountLineItem = function (bill, amount) {
-  this.owedLineItems.push({
-    bill: bill,
-    amount: amount,
-  });
-  this.owedTotal += amount;
-}
-
-/**
- * An extremely simple clone for a person. Any attributes that are
- * not default to a Person object (name, in, out) will NOT be
- * cloned!
- * @return a cloned Person object
- */
-Person.prototype.clone = function() {
-  return new Person(this.name, this.in, this.out);
-};
 
 /**
  * A class that represents a Bill.
@@ -61,33 +43,53 @@ Person.prototype.clone = function() {
  * @param start the start date for the billing cycle.
  * @param end the end date for the billing cycle.
  */
-export function Bill(forVal, total, start, end) {
-  this.for = forVal;
-  this.total = total;
-  if (typeof start === 'string') {
-    this.start = moment(start, dateFormat);
-  } else {
-    this.start = start;
+export class Bill {
+  constructor(forVal, total=0, start, end) {
+    this.for = forVal;
+    this.total = Number(total);
+    if (typeof start === 'string') {
+      this.start = moment(start, dateFormat);
+    } else {
+      this.start = start;
+    }
+    if (typeof end === 'string') {
+      this.end = moment(end, dateFormat);
+    } else {
+      this.end = end;
+    }
+    this.range = moment().range(this.start, this.end);
   }
-  if (typeof end === 'string') {
-    this.end = moment(end, dateFormat);
-  } else {
-    this.end = end;
+
+  toString() {
+    const startStr = this.start.format(dateFormat);
+    const endStr = this.end.format(dateFormat);
+    return "Bill for " + this.for + " between " + startStr + " and " + endStr;
   }
 }
 
-Bill.prototype.toString = function() {
-  const startStr = this.start.format(dateFormat);
-  const endStr = this.end.format(dateFormat);
-  return "Bill for " + this.for + " between " + startStr + " and" + endStr;
-};
+/**
+ * A Result object, containing references a Person and a list of ResultLineItem.
+ */
+export class Result {
+  constructor(person) {
+    this.person = person;
+    this.lineItems = [];
+    this.totalAmount = 0;
+  }
+
+  addLineItem(lineItem) {
+    this.lineItems.push(lineItem);
+    this.totalAmount += lineItem.value;
+  }
+}
 
 /**
- * An extremely simple clone() for a Bill object; any attribute(s)
- * that are not default to a Bill (for, total, start, end) will NOT
- * be cloned.
- * @return a cloned Bill object.
+ * We use this class to store a result line item, which references a bill and a
+ * Num value.
  */
-Bill.prototype.clone = function() {
-  return new Bill(this['for'], this.total, this.start, this.end);
-};
+export class ResultLineItem {
+  constructor(bill, value) {
+    this.bill = bill;
+    this.value = value;
+  }
+}

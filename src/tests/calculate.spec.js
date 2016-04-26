@@ -11,9 +11,9 @@ describe('calculate', function() {
       bill = new Bill("Internet", 3000, "Feb 1, 2012", "Mar 1, 2012"),
       result;
     result = calculate([bill], [neo, trinity, morpheus]);
-    expect(Math.floor(result[0].owedTotal)).toEqual(1000);
-    expect(Math.floor(result[1].owedTotal)).toEqual(1000);
-    expect(Math.floor(result[2].owedTotal)).toEqual(1000);
+    expect(Math.floor(result[0].totalAmount)).toEqual(1000);
+    expect(Math.floor(result[1].totalAmount)).toEqual(1000);
+    expect(Math.floor(result[2].totalAmount)).toEqual(1000);
   });
   it('should unevenly split the bill in simple cases', function() {
     var neo = new Person("Neo", "Jan 1, 2012",
@@ -24,8 +24,8 @@ describe('calculate', function() {
         "Jan 1, 2012", "Jan 30, 2012"),
       result;
     result = calculate([bill], [neo, trinity]);
-    expect(Math.floor(result[0].owedTotal)).toEqual(2000);
-    expect(Math.floor(result[1].owedTotal)).toEqual(1000);
+    expect(Math.floor(result[0].totalAmount)).toEqual(2000);
+    expect(Math.floor(result[1].totalAmount)).toEqual(1000);
   });
   it('should handle days with no one present gracefully', function() {
     // If there are days with no one present, and there are
@@ -40,7 +40,7 @@ describe('calculate', function() {
         "Dec 20, 2011", "Jan 30, 2012"),
       result;
     result = calculate([bill], [neo, trinity]);
-    expect(Math.floor(result[0].owedTotal)).toEqual(2000);
-    expect(Math.floor(result[1].owedTotal)).toEqual(1000);
+    expect(Math.floor(result[0].totalAmount)).toEqual(2000);
+    expect(Math.floor(result[1].totalAmount)).toEqual(1000);
   });
 });

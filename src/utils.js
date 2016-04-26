@@ -1,6 +1,7 @@
 "use strict";
 
 import moment from "moment";
+import { Result, ResultLineItem } from "./models";
 
 export const validateDate = (date) => {
   return moment(date).isValid();
@@ -8,20 +9,51 @@ export const validateDate = (date) => {
 
 export const dateFormat = "MMM DD, YYYY";
 
+/**
+ * This function takes in a list of Bills and a list of People,
+ * and calculate how much each Person owes
+ * It makes the assumption that everyone consumes the same amount of utility.
+ * From this assumption, the number of consumption units can be calculated for
+ * each person in the bill cycle. For example: if Person 1 are in 30 days of
+ * the bill cycle, and Person 2 are in 15 days; it'd stand to reason that
+ * Person 1 uses 30 units of consumption, whereas Person uses 15. Based on
+ * these numbers, we can calculate the ratio that Person 1 and Person 2
+ * should pay for the bill - in the earlier example, Person 1 should pay
+ * 30/(30+15) percent of the bill, while Person 2 should pay 15/(30+15)
+ * percent of the bill.
+ * In the event that no one is present for a bill period, they should not have
+ * to pay anything for that bill. However, if one of them is present during
+ * any period of the bill (even 1 day), they'll have to be responsible for the
+ * whole bill.
+
+ * @param bills a list of Bill objects
+ * @param people a list of Person objects
+ * @returns a list of People objects, with their owedTotal and owedLineItems
+ * values populated
+ */
 export const calculate = (bills, people) => {
-  const result = people.map(person => person.clone());
+  const results = people.map(person => new Result(person));
+
   bills.forEach(bill => {
-    const billRange = moment().range(bill.start, bill.end);
     const unitsOfConsumption = people.map(
-      person => billRange.intersect(person.range).toArray("days").length
+      person => {
+        const intersection = bill.range.intersect(person.range);
+        return intersection ? intersection.toArray("days").length : 0;
+      }
     );
+
     const totalUnitsOfConsumption = unitsOfConsumption.reduce(
       (total, units) => total + units,
       0
     );
+
     unitsOfConsumption.forEach((units, index) => {
-      result[index].addAmountLineItem(bill, (units/totalUnitsOfConsumption) * bill.total);
+      const ratio = totalUnitsOfConsumption != 0 ? units/totalUnitsOfConsumption : 0;
+      results[index].addLineItem(
+        new ResultLineItem(bill, ratio * bill.total)
+      );
     });
   });
-  return result;
+
+  return results;
 };
