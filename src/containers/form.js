@@ -16,6 +16,31 @@ export const fields = [
 ];
 export const formName = "appForm";
 
+const validate = values => {
+  const errors = {
+    people: [],
+    bills: []
+  };
+  errors.people = values.people.map(person => {
+    if (!person.name) {
+      return { name: "Name is required" };
+    }
+    return {};
+  });
+
+  errors.bills = values.bills.map(bill => {
+    const errs = {};
+    if (!bill.name) {
+      errs.name = "Name is required";
+    }
+    if (!bill.amount) {
+      errs.amount = "Amount is required";
+    }
+    return errs;
+  });
+  return errors;
+};
+
 class Form extends Component {
   componentWillMount() {
     this.props.fields.people.addField();
@@ -44,6 +69,7 @@ class Form extends Component {
             <label>Person #{index + 1}</label>
             <div>
               <PureInput type="text" placeholder="Person Name" field={person.name} />
+              {person.name.touched && person.name.error && <div>{person.name.error}</div>}
             </div>
             <div>
               <DateInput placeholder="Move In Date" field={person.moveInDate} />
@@ -60,15 +86,17 @@ class Form extends Component {
             <label>Bill #{index + 1}</label>
             <div>
               <PureInput type="text" placeholder="Bill Name" field={bill.name} />
+              {bill.name.touched && bill.name.error && <div>{bill.name.error}</div>}
             </div>
             <div>
               <PureInput type="text" placeholder="Amount" field={bill.amount} />
+              {bill.amount.touched && bill.amount.error && <div>{bill.amount.error}</div>}
             </div>
             <div>
-              <DateInput type="text" placeholder="Start Date" field={bill.startDate} />
+              <DateInput placeholder="Start Date" field={bill.startDate} />
             </div>
             <div>
-              <DateInput type="text" placeholder="End Date" field={bill.endDate} />
+              <DateInput placeholder="End Date" field={bill.endDate} />
             </div>
           </div>
         </div>
@@ -87,6 +115,7 @@ Form = reduxForm(
   {
     form: formName,
     fields,
+    validate,
   },
 )(Form);
 
