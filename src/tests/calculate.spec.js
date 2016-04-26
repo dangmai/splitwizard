@@ -27,11 +27,21 @@ describe('calculate', function() {
     expect(Math.floor(result[0].totalAmount)).toEqual(2000);
     expect(Math.floor(result[1].totalAmount)).toEqual(1000);
   });
+  it("should handle periods with no present correctly", function () {
+    // If there exists a bill that no one should be responsible for, the
+    // calculation should return 0
+    var neo = new Person("Neo", "Jan 1, 2012",
+        "Jan 31, 2012"),
+      trinity = new Person("Trinity", "Jan 1, 2012",
+        "Jan 31, 2012"),
+      bill = new Bill("Internet", 3000,
+        "Feb 1, 2012", "Feb 28, 2012"),
+      result;
+    result = calculate([bill], [neo, trinity]);
+    expect(Math.floor(result[0].totalAmount)).toEqual(0);
+    expect(Math.floor(result[1].totalAmount)).toEqual(0);
+  });
   it('should handle days with no one present gracefully', function() {
-    // If there are days with no one present, and there are
-    // variations in the # of days the people in the house,
-    // it may lead to the situation where the matrix cannot be
-    // inversed; and thus a solution cannot be found.
     var neo = new Person("Neo", "Jan 1, 2012",
         "Dec 31, 3000"),
       trinity = new Person("Trinity", "Jan 16, 2012",
