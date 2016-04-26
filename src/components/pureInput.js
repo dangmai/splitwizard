@@ -7,7 +7,7 @@ class PureInput extends Component {
 
   render() {
     const { field, ...rest } = this.props;
-    return <input {...field} {...rest}/>
+    return <input {...field} {...rest} />
   }
 }
 

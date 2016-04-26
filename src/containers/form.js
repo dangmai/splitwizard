@@ -1,8 +1,9 @@
 import React, { Component, PropTypes } from "react";
 import PureInput from "../components/pureInput";
+import DateInput from "../components/dateInput";
 import Result from "./result";
 import { calculate } from "../actions/result";
-import {reduxForm} from "redux-form";
+import { reduxForm } from "redux-form";
 
 export const fields = [
   "people[].name",
@@ -45,10 +46,10 @@ class Form extends Component {
               <PureInput type="text" placeholder="Person Name" field={person.name} />
             </div>
             <div>
-              <PureInput type="text" placeholder="Move In Date" field={person.moveInDate} />
+              <DateInput placeholder="Move In Date" field={person.moveInDate} />
             </div>
             <div>
-              <PureInput type="text" placeholder="Move Out Date" field={person.moveOutDate} />
+              <DateInput placeholder="Move Out Date" field={person.moveOutDate} />
             </div>
           </div>
         </div>
@@ -64,10 +65,10 @@ class Form extends Component {
               <PureInput type="text" placeholder="Amount" field={bill.amount} />
             </div>
             <div>
-              <PureInput type="text" placeholder="Start Date" field={bill.startDate} />
+              <DateInput type="text" placeholder="Start Date" field={bill.startDate} />
             </div>
             <div>
-              <PureInput type="text" placeholder="End Date" field={bill.endDate} />
+              <DateInput type="text" placeholder="End Date" field={bill.endDate} />
             </div>
           </div>
         </div>

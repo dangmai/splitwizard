@@ -10,7 +10,7 @@ class Result extends Component {
       <div>
         <ul>
         {this.props.result.map((result, index) => (
-          <li key={index}>{result.name} owes {result.owedTotal}</li>
+          <li key={index}>{result.person.name} owes {result.totalAmount}</li>
         ))}
         </ul>
       </div>
