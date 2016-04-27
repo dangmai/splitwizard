@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from "react";
 import DatePicker from "react-datepicker";
-require('react-datepicker/dist/react-datepicker.css');
 import moment from "moment";
 
 import { dateFormat } from "../utils";
