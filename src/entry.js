@@ -1,5 +1,6 @@
 "use strict";
 
+require("bootstrap/less/bootstrap.less");
 require("./main.css");
 
 import React from "react"
