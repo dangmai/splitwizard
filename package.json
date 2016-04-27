@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "watch": "webpack-dev-server --progress --colors --watch",
-    "build": "npm install && webpack --progress --colors",
+    "build": "npm install && webpack --progress --colors --config webpack.config.prod.js",
     "test": "karma start"
   },
   "dependencies": {
