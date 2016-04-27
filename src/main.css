@@ -5,7 +5,6 @@ html {
     font-size: 16px;
 }
 
-
 body {
     font-family: 'Cabin', Helvetica, Arial, sans-serif;
     font-size: 1em;
@@ -68,8 +67,24 @@ label {
     color: #387038;
 }
 
-.remove {
+.btn-remove {
     color: red;
+}
+
+.btn-icon {
+    font-size: 1.5em;
+}
+
+.page-wrap {
+    min-height: 100%;
+    /* equal to footer height */
+    margin-bottom: -55px; 
+}
+
+.page-wrap:after {
+  content: "";
+  display: block;
+  height: 142px; 
 }
 
 footer {

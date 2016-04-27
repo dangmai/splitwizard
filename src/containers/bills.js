@@ -11,55 +11,39 @@ class Bills extends Component {
         <div className="category-title text-center">The Bills</div>
         <div className="bills">
           {bills.map((bill, index) => <div key={index} className="bill">
-            <div className="row">
-              <div className="col-md-8 form-inline">
-                <div className="control-group">
-                  <label htmlFor={"for" + index} className="col-md-2">What For</label>
-                  <div className="controls">
-                    <PureInput className="col-md-6 required" id={"for" + index} type="text" field={bill.name} />
-                  </div>
-                </div>
+            <div className="form-group row">
+              <label className="col-md-2" htmlFor={"for" + index}>What For</label>
+              <div className="col-md-6">
+                <PureInput className="form-control" id={"for" + index} type="text" field={bill.name} />
               </div>
-              <div className="col-md-4 form-inline">
-                <div className="control-group">
-                  <label htmlFor={"amount" + index} className="col-md-2">Total Due</label>
-                  <div className="controls">
-                    <PureInput className="col-md-3 required" id={"amount" + index} type="text" field={bill.amount} />
-                  </div>
-                </div>
+              <label className="col-md-2" htmlFor={"amount" + index}>Total Due</label>
+              <div className="col-md-2">
+                <PureInput className="form-control" id={"amount" + index} type="text" field={bill.amount} />
               </div>
             </div>
-            <div className="row">
-              <div className="col-md-6 form-inline">
-                <div className="control-group">
-                  <label htmlFor={"start" + index} className="col-md-4">Start Date</label>
-                  <div className="controls">
-                    <DateInput className="col-md-8 required" id={"start" + index} field={bill.startDate} />
-                  </div>
-                </div>
+            <div className="form-group row">
+              <label className="col-md-2" htmlFor={"start" + index}>Start Date</label>
+              <div className="col-md-4">
+                <DateInput className="form-control" id={"start" + index} field={bill.startDate} />
               </div>
-              <div className="col-md-6 form-inline">
-                <div className="control-group">
-                  <label htmlFor={"end" + index} className="col-md-4">End Date</label>
-                  <div className="controls">
-                    <DateInput className="col-md-8 required" id={"end" + index} field={bill.endDate} />
-                  </div>
-                </div>
+              <label className="col-md-2" htmlFor={"end" + index}>End Date</label>
+              <div className="col-md-4">
+                <DateInput className="form-control" id={"end" + index} field={bill.endDate} />
               </div>
             </div>
-            {index != 0 && <a className="remove text-center" onClick={(e) => {
+            {index != 0 && <button className="btn btn-link btn-block btn-remove" onClick={(e) => {
               e.preventDefault();
               bills.removeField(index);
-            }}>Remove</a>}
+            }}>Remove</button>}
           </div>
           )}
         </div>
-        <a href="#" id="more-bills" onClick={(e) => {
+        <button className="btn btn-link btn-block" onClick={(e) => {
           e.preventDefault();
           bills.addField();
         }}>
-          <i className="icon-plus"></i> Add Another Bill
-        </a>
+          <span className="btn-icon">+</span> Add Another Bill
+        </button>
       </div>
     );
   }

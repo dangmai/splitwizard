@@ -11,47 +11,35 @@ class People extends Component {
         <div className="category-title text-center">Mortal Men</div>
         <div className="people">
           {people.map((person, index) => <div key={index} className="person">
-            <div className="row">
-              <div className="col-md-12 form-inline">
-                <div className="control-group">
-                  <label htmlFor={"name" + index} className="col-md-2">Name</label>
-                  <div className="controls">
-                    <PureInput className="col-md-10 required" id={"name" + index} type="text" field={person.name} />
-                  </div>
-                </div>
+            <div className="form-group row">
+              <label className="col-md-2" htmlFor={"name" + index}>Name</label>
+              <div className="col-md-10">
+                <PureInput className="form-control" id={"name" + index} type="text" field={person.name} />
               </div>
             </div>
-            <div className="row">
-              <div className="col-md-6 form-inline">
-                <div className="control-group">
-                  <label htmlFor={"in" + index} className="col-md-4">Move In</label>
-                  <div className="controls">
-                    <DateInput className="col-md-8" title="Not necessary if outside the billing cycle" id={"in" + index} field={person.moveInDate} />
-                  </div>
-                </div>
+            <div className="form-group row">
+              <label className="col-md-2" htmlFor={"in" + index}>Move In</label>
+              <div className="col-md-4">
+                <DateInput className="form-control" title="Not necessary if outside the billing cycle" id={"in" + index} field={person.moveInDate} />
               </div>
-              <div className="col-md-6 form-inline">
-                <div className="control-group">
-                  <label htmlFor={"out" + index} className="col-md-4">Move Out</label>
-                  <div className="controls">
-                    <DateInput className="col-md-8" title="Not necessary if outside the billing cycle" id={"out" + index} field={person.moveOutDate} />
-                  </div>
-                </div>
+              <label className="col-md-2" htmlFor={"out" + index}>Move Out</label>
+              <div className="col-md-4">
+                <DateInput className="form-control" title="Not necessary if outside the billing cycle" id={"out" + index} field={person.moveOutDate} />
               </div>
             </div>
-            {index != 0 && <a className="remove text-center" onClick={(e) => {
+            {index != 0 && <button className="btn btn-link btn-block btn-remove" onClick={(e) => {
               e.preventDefault();
               people.removeField(index);
-            }}>Remove</a>}
+            }}>Remove</button>}
           </div>
           )}
         </div>
-        <a href="#" id="more-people" onClick={(e) => {
+        <button className="btn btn-link btn-block" onClick={(e) => {
           e.preventDefault();
           people.addField();
         }}>
-          <i className="icon-plus"></i> Add Another Person
-        </a>
+          <span className="btn-icon">+</span> Add Another Person
+        </button>
       </div>
     );
   }

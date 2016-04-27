@@ -70,9 +70,19 @@ class Form extends Component {
       <form onSubmit={handleSubmit}>
         <Welcome />
         <Result />
-        <People people={people} />
-        <Bills bills={bills} />
-        <input className="btn btn-success btn-large" value="Thou Shall Split!" type="submit" />
+        <div className="row">
+          <div className="col-md-12">
+            <div className="row">
+              <People people={people} />
+              <Bills bills={bills} />
+            </div>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-md-12">
+            <button className="btn btn-success btn-large center-block" type="submit">Thou Shall Split!</button>
+          </div>
+        </div>
       </form>
     );
   }
