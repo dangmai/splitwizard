@@ -1,12 +1,16 @@
 import React, { Component, PropTypes } from "react";
+import moment from "moment";
+import { reduxForm } from "redux-form";
+
 import PureInput from "../components/pureInput";
 import DateInput from "../components/dateInput";
+import Welcome from "../components/welcome";
 import Result from "./result";
 import People from "./people";
 import Bills from "./bills";
-import Welcome from "../components/welcome";
 import { calculate } from "../actions/result";
-import { reduxForm } from "redux-form";
+import { dateFormat } from "../utils";
+
 
 export const fields = [
   "people[].name",
@@ -19,16 +23,31 @@ export const fields = [
 ];
 export const formName = "appForm";
 
+// Return true if date is valid, false if invalid. Assuming that date is defined.
+const validateDate = date => {
+  if (date.isValid === undefined) {
+    date = moment(date, dateFormat);
+  }
+  return date.isValid();
+};
+
 const validate = values => {
   const errors = {
     people: [],
     bills: []
   };
   errors.people = values.people.map(person => {
+    const errs = {};
     if (!person.name) {
-      return { name: "Name is required" };
+      errs.name = "Name is required";
     }
-    return {};
+    if (person.moveInDate && !validateDate(person.moveInDate)) {
+      errs.moveInDate = "Move In Date is invalid";
+    }
+    if (person.moveOutDate && !validateDate(person.moveOutDate)) {
+      errs.moveOutDate = "Move Out Date is invalid";
+    }
+    return errs;
   });
 
   errors.bills = values.bills.map(bill => {
@@ -41,12 +60,12 @@ const validate = values => {
     }
     if (!bill.startDate) {
       errs.startDate = "Start Date is required";
-    } else if (!bill.startDate.isValid()) {
+    } else if (!validateDate(bill.startDate)) {
       errs.startDate = "Start Date is invalid";
     }
     if (!bill.endDate) {
       errs.endDate = "End Date is required";
-    } else if (!bill.endDate.isValid()) {
+    } else if (!validateDate(bill.endDate)) {
       errs.endDate = "End Date is invalid";
     }
     return errs;
