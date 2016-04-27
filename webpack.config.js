@@ -15,7 +15,12 @@ module.exports = {
     new ExtractTextPlugin("main.[contenthash].css"),
     new HtmlWebpackPlugin({
       template: "./src/index.html",
-      inject: "body"
+      inject: "body",
+      favicon: "./static/favicon.ico"
+    }),
+    new HtmlWebpackPlugin({
+      template: "html!./src/404.html",
+      filename: "404.html"
     })
   ],
   module: {
@@ -39,6 +44,10 @@ module.exports = {
     {
       test: /\.png$/,
       loader: "url-loader?limit=10000&minetype=image/png"
+    },
+    {
+      test: /\.jpg$/,
+      loader: "file"
     },
     {
       test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,

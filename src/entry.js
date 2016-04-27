@@ -1,5 +1,7 @@
 "use strict";
 
+require("file?name=robots.txt!../static/robots.txt");
+require("file?name=humans.txt!../static/humans.txt");
 require("bootstrap/less/bootstrap.less");
 require("./main.css");
 
