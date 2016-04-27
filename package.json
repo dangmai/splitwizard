@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "watch": "webpack-dev-server --progress --colors --watch",
-    "build": "npm install && webpack --progress --colors --config webpack.config.prod.js",
+    "build": "npm install && rimraf dist && webpack --progress --colors --config webpack.config.prod.js",
     "test": "karma start"
   },
   "dependencies": {
@@ -33,6 +33,7 @@
     "react-redux": "4.4.5",
     "redux": "3.4.0",
     "redux-form": "5.1.1",
+    "rimraf": "2.5.2",
     "style-loader": "0.13.0",
     "url-loader": "0.5.7",
     "webpack": "1.12.14"
