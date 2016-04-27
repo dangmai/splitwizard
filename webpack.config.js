@@ -1,10 +1,12 @@
 "use strict";
 
-var ExtractTextPlugin = require("extract-text-webpack-plugin");
-var HtmlWebpackPlugin = require('html-webpack-plugin');
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
   entry: "./src/entry.js",
+  debug: true,
+  devtool: "source-map",
   output: {
     path: "dist",
     filename: "bundle.[hash].js"
@@ -28,11 +30,11 @@ module.exports = {
     },
     {
       test: /\.css$/,
-      loader: ExtractTextPlugin.extract("style-loader", "css-loader")
+      loader: ExtractTextPlugin.extract("style-loader", "css-loader?sourceMap")
     },
     {
       test: /\.less$/,
-      loader: ExtractTextPlugin.extract("style-loader", "css-loader!less-loader")
+      loader: ExtractTextPlugin.extract("style-loader", "css-loader?sourceMap!less-loader?sourceMap")
     },
     {
       test: /\.png$/,
