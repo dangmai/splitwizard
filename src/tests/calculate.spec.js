@@ -1,7 +1,6 @@
 import expect from "expect";
 import { calculate } from "utils";
 import { Person, Bill } from "models";
-import deepFreeze from "deep-freeze";
 
 describe('calculate', function() {
   it('should evenly split the bill in simple cases', function() {
