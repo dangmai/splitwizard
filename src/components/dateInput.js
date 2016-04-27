@@ -13,7 +13,7 @@ export default class DateInput extends Component {
     const { field, placeholder, ...rest } = this.props;
     return (
       <DatePicker
-        selected={field.value ? moment(field.value) : null}
+        selected={field.value ? moment(field.value, dateFormat) : null}
         placeholderText={placeholder}
         dateFormat={dateFormat} {...field}
         {...rest} />)

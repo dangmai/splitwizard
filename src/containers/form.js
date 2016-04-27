@@ -39,13 +39,13 @@ const validate = values => {
   errors.people = values.people.map(person => {
     const errs = {};
     if (!person.name) {
-      errs.name = "Name is required";
+      errs.name = "Required";
     }
     if (person.moveInDate && !validateDate(person.moveInDate)) {
-      errs.moveInDate = "Move In Date is invalid";
+      errs.moveInDate = "Invalid Date";
     }
     if (person.moveOutDate && !validateDate(person.moveOutDate)) {
-      errs.moveOutDate = "Move Out Date is invalid";
+      errs.moveOutDate = "Invalid Date";
     }
     return errs;
   });
@@ -53,20 +53,22 @@ const validate = values => {
   errors.bills = values.bills.map(bill => {
     const errs = {};
     if (!bill.name) {
-      errs.name = "Name is required";
+      errs.name = "Required";
     }
     if (!bill.amount) {
-      errs.amount = "Amount is required";
+      errs.amount = "Required";
+    } else if (isNaN(Number(bill.amount))) {
+      errs.amount = "Invalid Number";
     }
     if (!bill.startDate) {
-      errs.startDate = "Start Date is required";
+      errs.startDate = "Required";
     } else if (!validateDate(bill.startDate)) {
-      errs.startDate = "Start Date is invalid";
+      errs.startDate = "Invalid Date";
     }
     if (!bill.endDate) {
-      errs.endDate = "End Date is required";
+      errs.endDate = "Required";
     } else if (!validateDate(bill.endDate)) {
-      errs.endDate = "End Date is invalid";
+      errs.endDate = "Invalid Date";
     }
     return errs;
   });
