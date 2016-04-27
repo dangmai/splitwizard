@@ -50,7 +50,7 @@ class People extends Component {
           e.preventDefault();
           people.addField();
         }}>
-          <span className="btn-icon">+</span> Add Another Person
+          <span className="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Another Person
         </button>
       </div>
     );

@@ -75,11 +75,29 @@ export class Result {
     this.person = person;
     this.lineItems = [];
     this.totalAmount = 0;
+    this.detailsShown = false;
   }
 
   addLineItem(lineItem) {
     this.lineItems.push(lineItem);
     this.totalAmount += lineItem.value;
+  }
+
+  getTotalAmountString() {
+    return this.totalAmount.toFixed(2);
+  }
+
+  toggleDetailsShown() {
+    this.detailsShown = !this.detailsShown;
+  }
+
+  clone() {
+    const newResult = new Result(this.person);
+    newResult.detailsShown = this.detailsShown;
+    this.lineItems.forEach(lineItem => {
+      newResult.addLineItem(new ResultLineItem(lineItem.bill, lineItem.value));
+    });
+    return newResult;
   }
 }
 
@@ -91,5 +109,9 @@ export class ResultLineItem {
   constructor(bill, value) {
     this.bill = bill;
     this.value = value;
+  }
+
+  getValueString() {
+    return this.value.toFixed(2);
   }
 }

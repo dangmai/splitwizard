@@ -61,7 +61,7 @@ class Bills extends Component {
           e.preventDefault();
           bills.addField();
         }}>
-          <span className="btn-icon">+</span> Add Another Bill
+          <span className="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Another Bill
         </button>
       </div>
     );

@@ -8,7 +8,7 @@ import Welcome from "../components/welcome";
 import Result from "./result";
 import People from "./people";
 import Bills from "./bills";
-import { calculate } from "../actions/result";
+import { calculate, clearResults } from "../actions/result";
 import { dateFormat } from "../utils";
 
 

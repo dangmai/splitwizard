@@ -9,13 +9,15 @@ import ReactDOM from "react-dom"
 import { Provider } from "react-redux";
 import Form, { fields } from "./containers/form";
 import { store } from "./reducers/index";
-import { calculate } from "./actions/result";
+import { calculate, clearResults } from "./actions/result";
 
 class App extends React.Component {
   render() {
     return (
       <Provider store={store}>
-        <Form fields={fields} onSubmit={ values => store.dispatch(calculate(values.bills, values.people)) } />
+        <Form fields={fields}
+          onSubmit={ values => store.dispatch(calculate(values.bills, values.people)) }
+          onSubmitFail={ () => store.dispatch(clearResults()) } />
       </Provider>
     );
   }
