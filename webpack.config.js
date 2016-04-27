@@ -7,10 +7,10 @@ module.exports = {
   entry: "./src/entry.js",
   output: {
     path: "dist",
-    filename: "index_bundle.js"
+    filename: "bundle.[hash].js"
   },
   plugins: [
-    new ExtractTextPlugin("main.css"),
+    new ExtractTextPlugin("main.[contenthash].css"),
     new HtmlWebpackPlugin({
       template: "./src/index.html",
       inject: "body"
