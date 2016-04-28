@@ -125,18 +125,12 @@ Form.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
 };
 
-const mapDispatchToProps = (dispatch) => ({
-  initialize: (people) => dispatch(initialize(people))
-});
-
 Form = reduxForm(
   {
     form: formName,
     fields,
     validate,
   },
-  undefined,
-
 )(Form);
 
 export default Form;
