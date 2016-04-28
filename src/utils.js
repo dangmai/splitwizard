@@ -1,13 +1,22 @@
 "use strict";
 
 import moment from "moment";
+import cookies from "js-cookie";
 import { Result, ResultLineItem } from "./models";
 
-export const validateDate = (date) => {
-  return moment(date).isValid();
+export const dateFormat = "MMM DD, YYYY";
+
+// Take in a list of people from the Form state, and save it to a cookie
+export const serializePeople = (people) => {
+  cookies.set("people", people, { expires: 365 });
 }
 
-export const dateFormat = "MMM DD, YYYY";
+export const deserializePeople = () => {
+  const people = cookies.get("people");
+  if (people) {
+    return JSON.parse(people);
+  }
+};
 
 /**
  * This function takes in a list of Bills and a list of People,

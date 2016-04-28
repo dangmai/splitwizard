@@ -9,7 +9,7 @@ import Result from "./result";
 import People from "./people";
 import Bills from "./bills";
 import { calculate, clearResults } from "../actions/result";
-import { dateFormat } from "../utils";
+import { dateFormat, deserializePeople } from "../utils";
 
 
 export const fields = [
@@ -77,8 +77,19 @@ const validate = values => {
 
 class Form extends Component {
   componentWillMount() {
-    this.props.fields.people.addField();
-    this.props.fields.people.addField();
+    const people = deserializePeople();
+    if (people) {
+      people.forEach(person => {
+        this.props.fields.people.addField({
+          name: person.name.value,
+          moveInDate: person.moveInDate.value,
+          moveOutDate: person.moveOutDate.value
+        });
+      });
+    } else {
+      this.props.fields.people.addField();
+      this.props.fields.people.addField();
+    }
     this.props.fields.bills.addField();
   }
 
@@ -113,12 +124,19 @@ Form.propTypes = {
   fields: PropTypes.object.isRequired,
   handleSubmit: PropTypes.func.isRequired,
 };
+
+const mapDispatchToProps = (dispatch) => ({
+  initialize: (people) => dispatch(initialize(people))
+});
+
 Form = reduxForm(
   {
     form: formName,
     fields,
     validate,
   },
+  undefined,
+
 )(Form);
 
 export default Form;

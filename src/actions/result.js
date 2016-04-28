@@ -18,3 +18,9 @@ export function toggleDetailedResult(index) {
     index
   }
 }
+
+export function completeSave() {
+  return {
+    type: "SAVE_COMPLETED"
+  }
+}
