@@ -3,7 +3,7 @@ MAINTAINER Dang Mai <contact@dangmai.net>
 
 COPY . /src
 WORKDIR /src
-RUN npm install && npm run build
+RUN npm run build
 EXPORT /src/dist
 
 FROM zzrot/alpine-caddy:latest
