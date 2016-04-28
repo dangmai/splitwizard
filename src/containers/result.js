@@ -13,6 +13,10 @@ class Result extends Component {
     store.dispatch(completeSave());
   }
 
+  shouldComponentUpdate(nextProps) {
+    return this.props.result !== nextProps.result || this.props.saveCompleted !== nextProps.saveCompleted;
+  }
+
   render() {
     if (this.props.result.length === 0) {
       return null;
