@@ -1,6 +1,6 @@
 #!/bin/sh
 HOST=${HOST:-localhost}
-EMAIL=${HOST:-name@example.com}
+EMAIL=${EMAIL:-name@example.com}
 
 cat << EOF > /etc/Caddyfile
 $HOST:80
