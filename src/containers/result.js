@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from "react";
 import { connect } from "react-redux";
 
-import { store } from "../reducers/index";
 import { toggleDetailedResult, completeSave } from "../actions/result";
 import { Person, Bill, formName } from "../models";
 import { calculate, dateFormat, serializePeople } from "../utils";
@@ -10,7 +9,7 @@ class Result extends Component {
   handleSaveClick(e) {
     e.preventDefault();
     serializePeople(this.props.people);
-    store.dispatch(completeSave());
+    this.props.completeSave();
   }
 
   shouldComponentUpdate(nextProps) {
@@ -27,7 +26,7 @@ class Result extends Component {
           <div key={"result" + index} className="result-person">
             {result.person.name} owes {result.getTotalAmountString()} <a href="#" className="result-details" onClick={(e) => {
               e.preventDefault();
-              store.dispatch(toggleDetailedResult(index));
+              this.props.onResultClick(index);
             }}>
               <span className="glyphicon glyphicon-plus" aria-hidden="true"></span> 
             </a>
@@ -49,8 +48,19 @@ class Result extends Component {
   }
 }
 
+const mapStateToProps = state => ({
+  result: state.result,
+  saveCompleted: state.saveCompleted,
+  people: state.form[formName].people
+});
+const mapDispatchToProps = dispatch => ({
+  onResultClick: (index) => dispatch(toggleDetailedResult(index)),
+  completeSave: () => dispatch(completeSave())
+});
+
 Result = connect(
-  state => ({ result: state.result, saveCompleted: state.saveCompleted, people: state.form[formName].people })
+  mapStateToProps,
+  mapDispatchToProps
 )(Result);
 
 export default Result;
