@@ -8,11 +8,11 @@ import Welcome from "../components/welcome";
 import Result from "./result";
 import People from "./people";
 import Bills from "./bills";
+import { formName } from "../models"
 import { calculate, clearResults } from "../actions/result";
 import { dateFormat, deserializePeople } from "../utils";
 
-
-export const fields = [
+const fields = [
   "people[].name",
   "people[].moveInDate",
   "people[].moveOutDate",
@@ -21,7 +21,6 @@ export const fields = [
   "bills[].startDate",
   "bills[].endDate"
 ];
-export const formName = "appForm";
 
 // Return true if date is valid, false if invalid. Assuming that date is defined.
 const validateDate = date => {
@@ -121,7 +120,6 @@ class Form extends Component {
 }
 
 Form.propTypes = {
-  fields: PropTypes.object.isRequired,
   handleSubmit: PropTypes.func.isRequired,
 };
 

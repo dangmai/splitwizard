@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 
 import { store } from "../reducers/index";
 import { toggleDetailedResult, completeSave } from "../actions/result";
-import { Person, Bill } from "../models";
+import { Person, Bill, formName } from "../models";
 import { calculate, dateFormat, serializePeople } from "../utils";
 
 class Result extends Component {
@@ -50,7 +50,7 @@ class Result extends Component {
 }
 
 Result = connect(
-  state => ({ result: state.result, saveCompleted: state.saveCompleted, people: state.form.appForm.people })
+  state => ({ result: state.result, saveCompleted: state.saveCompleted, people: state.form[formName].people })
 )(Result);
 
 export default Result;

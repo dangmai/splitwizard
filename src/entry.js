@@ -17,7 +17,7 @@ class App extends React.Component {
   render() {
     return (
       <Provider store={store}>
-        <Form fields={fields}
+        <Form
           onSubmit={ values => store.dispatch(calculate(values.bills, values.people)) }
           onSubmitFail={ () => store.dispatch(clearResults()) } />
       </Provider>

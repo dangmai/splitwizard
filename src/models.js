@@ -4,6 +4,8 @@ import moment from "moment";
 require("imports?define=>false!moment-range");
 import { dateFormat } from "./utils"
 
+export const formName = "appForm";
+
 /**
  * A class that represents a Person.
  * @param name the person's name
