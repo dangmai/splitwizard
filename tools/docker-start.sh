@@ -3,7 +3,7 @@ HOST=${HOST:-localhost}
 EMAIL=${EMAIL:-name@example.com}
 
 cat << EOF > /etc/Caddyfile
-$HOST:80
+$HOST
 gzip
 
 root /var/www/html
