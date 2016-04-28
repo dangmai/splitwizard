@@ -80,6 +80,10 @@ label.control-label {
     font-size: 1.5em;
 }
 
+.btn.btn-link.btn-block:focus {
+    outline: none;
+}
+
 .page-wrap {
     min-height: 100%;
     /* equal to footer height */
