@@ -13,4 +13,4 @@ after_success:
   - export BRANCH=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo $TRAVIS_BRANCH; else echo `curl -s $PR | jq -r .head.ref`; fi)
   - export REPO="dangmai/splitwizard:latest"
   - export CONTAINER_NAME="splitwizard"
-  - if [ "$BRANCH" == "master" ]; then bash ./deploy/deploy.sh; fi
+  - if [ "$BRANCH" == "master" ]; then bash ./deploy/deploy.sh -e HOST=$HOST -e EMAIL=$EMAIL; fi
