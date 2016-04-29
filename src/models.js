@@ -2,7 +2,7 @@
 import moment from "moment";
 // https://github.com/gf3/moment-range/issues/101
 require("imports?define=>false!moment-range");
-import { dateFormat } from "./utils"
+import { dateFormat } from "./utils";
 
 export const formName = "appForm";
 
@@ -16,16 +16,16 @@ export class Person {
   constructor(name, inDate, outDate) {
     this.name = name;
 
-    if (inDate && typeof inDate === 'string') {
+    if (inDate && typeof inDate === "string") {
       this.in = moment(inDate, dateFormat);
-    } else if (inDate && typeof inDate === 'object') {
+    } else if (inDate && typeof inDate === "object") {
       this.in = inDate;
     } else {
       this.in = moment("Jan 01, 1970", dateFormat);
     }
-    if (outDate && typeof outDate === 'string') {
+    if (outDate && typeof outDate === "string") {
       this.out = moment(outDate, dateFormat);
-    } else if (outDate && typeof outDate === 'object') {
+    } else if (outDate && typeof outDate === "object") {
       this.out = outDate;
     } else {
       this.out = moment("Dec 31, 3000", dateFormat);
@@ -46,15 +46,15 @@ export class Person {
  * @param end the end date for the billing cycle.
  */
 export class Bill {
-  constructor(forVal, total=0, start, end) {
+  constructor(forVal, total = 0, start, end) {
     this.for = forVal;
     this.total = Number(total);
-    if (typeof start === 'string') {
+    if (typeof start === "string") {
       this.start = moment(start, dateFormat);
     } else {
       this.start = start;
     }
-    if (typeof end === 'string') {
+    if (typeof end === "string") {
       this.end = moment(end, dateFormat);
     } else {
       this.end = end;
@@ -65,7 +65,22 @@ export class Bill {
   toString() {
     const startStr = this.start.format(dateFormat);
     const endStr = this.end.format(dateFormat);
-    return "Bill for " + this.for + " between " + startStr + " and " + endStr;
+    return `Bill for ${this.for} between ${startStr} and ${endStr}`;
+  }
+}
+
+/**
+ * We use this class to store a result line item, which references a bill and a
+ * Num value.
+ */
+export class ResultLineItem {
+  constructor(bill, value) {
+    this.bill = bill;
+    this.value = value;
+  }
+
+  getValueString() {
+    return this.value.toFixed(2);
   }
 }
 
@@ -100,20 +115,5 @@ export class Result {
       newResult.addLineItem(new ResultLineItem(lineItem.bill, lineItem.value));
     });
     return newResult;
-  }
-}
-
-/**
- * We use this class to store a result line item, which references a bill and a
- * Num value.
- */
-export class ResultLineItem {
-  constructor(bill, value) {
-    this.bill = bill;
-    this.value = value;
-  }
-
-  getValueString() {
-    return this.value.toFixed(2);
   }
 }

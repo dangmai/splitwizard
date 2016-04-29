@@ -6,8 +6,7 @@ import Welcome from "../components/welcome";
 import Result from "./result";
 import People from "./people";
 import Bills from "./bills";
-import { formName } from "../models"
-import { calculate, clearResults } from "../actions/result";
+import { formName } from "../models";
 import { dateFormat, deserializePeople } from "../utils";
 
 const fields = [
@@ -17,21 +16,22 @@ const fields = [
   "bills[].name",
   "bills[].amount",
   "bills[].startDate",
-  "bills[].endDate"
+  "bills[].endDate",
 ];
 
 // Return true if date is valid, false if invalid. Assuming that date is defined.
 const validateDate = date => {
-  if (date.isValid === undefined) {
-    date = moment(date, dateFormat);
+  let dateToValidate = date;
+  if (dateToValidate.isValid === undefined) {
+    dateToValidate = moment(dateToValidate, dateFormat);
   }
-  return date.isValid();
+  return dateToValidate.isValid();
 };
 
 const validate = values => {
   const errors = {
     people: [],
-    bills: []
+    bills: [],
   };
   errors.people = values.people.map(person => {
     const errs = {};
@@ -80,7 +80,7 @@ class Form extends Component {
         this.props.fields.people.addField({
           name: person.name.value,
           moveInDate: person.moveInDate.value,
-          moveOutDate: person.moveOutDate.value
+          moveOutDate: person.moveOutDate.value,
         });
       });
     } else {
@@ -93,7 +93,7 @@ class Form extends Component {
   render() {
     const {
       fields: { people, bills },
-      handleSubmit
+      handleSubmit,
     } = this.props;
     return (
       <form onSubmit={handleSubmit}>
@@ -109,7 +109,9 @@ class Form extends Component {
         </div>
         <div className="row">
           <div className="col-md-12">
-            <button className="btn btn-success btn-large center-block" type="submit">Thou Shall Split!</button>
+            <button className="btn btn-success btn-large center-block" type="submit">
+              Thou Shall Split!
+            </button>
           </div>
         </div>
       </form>
@@ -119,6 +121,7 @@ class Form extends Component {
 
 Form.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
+  fields: PropTypes.object.isRequired,
 };
 
 Form = reduxForm(

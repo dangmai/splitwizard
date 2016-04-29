@@ -1,6 +1,3 @@
-"use strict";
-
-import moment from "moment";
 import cookies from "js-cookie";
 import { Result, ResultLineItem } from "./models";
 
@@ -9,7 +6,9 @@ export const dateFormat = "MMM DD, YYYY";
 // Take in a list of people from the Form state, and save it to a cookie
 export const serializePeople = (people) => {
   cookies.set("people", people, { expires: 365 });
-}
+};
+
+const removeCookie = () => cookies.remove("people");
 
 export const deserializePeople = () => {
   let people = cookies.get("people");
@@ -19,18 +18,18 @@ export const deserializePeople = () => {
     } catch (ex) {
       // Invalidating any weird cookies
       removeCookie();
-      return;
+      return null;
     }
     if (!people.name || !people.moveInDate || !people.moveOutDate) {
       // Deals with the old version of the cookie by simply invaliding them
       removeCookie();
-      return;
+      return null;
     }
     return people;
   }
+  return null;
 };
 
-const removeCookie = () => cookies.remove("people");
 
 /**
  * This function takes in a list of Bills and a list of People,
@@ -71,7 +70,7 @@ export const calculate = (bills, people) => {
     );
 
     unitsOfConsumption.forEach((units, index) => {
-      const ratio = totalUnitsOfConsumption != 0 ? units/totalUnitsOfConsumption : 0;
+      const ratio = totalUnitsOfConsumption !== 0 ? units / totalUnitsOfConsumption : 0;
       results[index].addLineItem(
         new ResultLineItem(bill, ratio * bill.total)
       );

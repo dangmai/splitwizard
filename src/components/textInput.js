@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component, PropTypes } from "react";
 
 class TextInput extends Component {
   shouldComponentUpdate(nextProps) {
@@ -7,12 +7,12 @@ class TextInput extends Component {
 
   render() {
     const { field, ...rest } = this.props;
-    return <input {...field} {...rest} />
+    return <input {...field} {...rest} />;
   }
 }
 
 TextInput.propTypes = {
   field: PropTypes.object.isRequired,
-}
+};
 
 export default TextInput;

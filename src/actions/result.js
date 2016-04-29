@@ -2,25 +2,25 @@ export function calculate(bills, people) {
   return {
     type: "CALCULATE",
     bills,
-    people
-  }
+    people,
+  };
 }
 
 export function clearResults() {
   return {
-    type: "CLEAR_RESULTS"
+    type: "CLEAR_RESULTS",
   };
 }
 
 export function toggleDetailedResult(index) {
   return {
     type: "TOGGLE_DETAILED_RESULT",
-    index
-  }
+    index,
+  };
 }
 
 export function completeSave() {
   return {
-    type: "SAVE_COMPLETED"
-  }
+    type: "SAVE_COMPLETED",
+  };
 }

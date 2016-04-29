@@ -1,7 +1,7 @@
 import { Person, Bill } from "../models";
 import { calculate } from "../utils";
 
-export function result(state=[], action) {
+export function result(state = [], action) {
   switch (action.type) {
     case "CALCULATE":
       return calculate(
@@ -10,14 +10,15 @@ export function result(state=[], action) {
       );
     case "CLEAR_RESULTS":
       return [];
-    case "TOGGLE_DETAILED_RESULT":
+    case "TOGGLE_DETAILED_RESULT": {
       const clonedResult = state[action.index].clone();
       clonedResult.toggleDetailsShown();
       return [
         ...state.slice(0, action.index),
         clonedResult,
-        ...state.slice(action.index+1)
+        ...state.slice(action.index + 1),
       ];
+    }
     default:
       return state;
   }

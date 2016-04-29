@@ -10,5 +10,8 @@
     "quotes": [
       2, "double", "avoid-escape"  // http://eslint.org/docs/rules/quotes
     ],
+  },
+  "settings": {
+    "import/resolver": "webpack"
   }
 }
