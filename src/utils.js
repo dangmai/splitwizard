@@ -12,11 +12,25 @@ export const serializePeople = (people) => {
 }
 
 export const deserializePeople = () => {
-  const people = cookies.get("people");
+  let people = cookies.get("people");
   if (people) {
-    return JSON.parse(people);
+    try {
+      people = JSON.parse(people);
+    } catch (ex) {
+      // Invalidating any weird cookies
+      removeCookie();
+      return;
+    }
+    if (!people.name || !people.moveInDate || !people.moveOutDate) {
+      // Deals with the old version of the cookie by simply invaliding them
+      removeCookie();
+      return;
+    }
+    return people;
   }
 };
+
+const removeCookie = () => cookies.remove("people");
 
 /**
  * This function takes in a list of Bills and a list of People,
