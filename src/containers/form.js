@@ -2,8 +2,6 @@ import React, { Component, PropTypes } from "react";
 import moment from "moment";
 import { reduxForm } from "redux-form";
 
-import PureInput from "../components/pureInput";
-import DateInput from "../components/dateInput";
 import Welcome from "../components/welcome";
 import Result from "./result";
 import People from "./people";

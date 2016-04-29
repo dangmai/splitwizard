@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 
-import PureInput from "../components/pureInput";
-import DateInput from "../components/dateInput";
+import DateInputControl from "../components/dateInputControl";
+import TextInputControl from "../components/textInputControl";
 
 class Bills extends Component {
   render() {
@@ -12,42 +12,10 @@ class Bills extends Component {
         <div className="bills">
           {bills.map((bill, index) => <div key={index} className="bill">
             <div className="form-horizontal">
-              <div className="col-md-8">
-                <div className={"form-group " + (bill.name.touched && bill.name.error ? "has-error" : "")}>
-                  <label className="col-md-3 control-label" htmlFor={"for" + index}>What For</label>
-                  <div className="col-md-9">
-                    <PureInput className="form-control" id={"for" + index} type="text" field={bill.name} />
-                    {bill.name.touched && bill.name.error && <span className="help-block">{bill.name.error}</span>}
-                  </div>
-                </div>
-              </div>
-              <div className="col-md-4">
-                <div className={"form-group " + (bill.amount.touched && bill.amount.error ? "has-error" : "")}>
-                  <label className="col-md-6 control-label" htmlFor={"amount" + index}>Total Due</label>
-                  <div className="col-md-6">
-                    <PureInput className="form-control" id={"amount" + index} type="text" field={bill.amount} />
-                    {bill.amount.touched && bill.amount.error && <span className="help-block">{bill.amount.error}</span>}
-                  </div>
-                </div>
-              </div>
-              <div className="col-md-6">
-                <div className={"form-group " + (bill.startDate.touched && bill.startDate.error ? "has-error" : "")}>
-                  <label className="col-md-4 control-label" htmlFor={"start" + index}>Start Date</label>
-                  <div className="col-md-8">
-                    <DateInput className="form-control" id={"start" + index} field={bill.startDate} />
-                    {bill.startDate.touched && bill.startDate.error && <span className="help-block">{bill.startDate.error}</span>}
-                  </div>
-                </div>
-              </div>
-              <div className="col-md-6">
-                <div className={"form-group " + (bill.endDate.touched && bill.endDate.error ? "has-error" : "")}>
-                  <label className="col-md-4 control-label" htmlFor={"end" + index}>End Date</label>
-                  <div className="col-md-8">
-                    <DateInput className="form-control" id={"end" + index} field={bill.endDate} />
-                    {bill.endDate.touched && bill.endDate.error && <span className="help-block">{bill.endDate.error}</span>}
-                  </div>
-                </div>
-              </div>
+              <TextInputControl field={bill.name} label="What For" uniqueKey={index} controlClassName="col-md-8" labelClassName="col-md-3" inputClassName="col-md-9" showHelpBlock={true} />
+              <TextInputControl field={bill.amount} label="Total Due" uniqueKey={index} controlClassName="col-md-4" labelClassName="col-md-6" inputClassName="col-md-6" showHelpBlock={true} />
+              <DateInputControl field={bill.startDate} label="Start Date" uniqueKey={index} controlClassName="col-md-6" labelClassName="col-md-4" inputClassName="col-md-8" showHelpBlock={true} />
+              <DateInputControl field={bill.endDate} label="End Date" uniqueKey={index} controlClassName="col-md-6" labelClassName="col-md-4" inputClassName="col-md-8" showHelpBlock={true} />
             </div>
             {index != 0 && <button className="btn btn-link btn-block btn-remove" onClick={(e) => {
               e.preventDefault();
