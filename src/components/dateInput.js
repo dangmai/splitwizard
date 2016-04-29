@@ -10,11 +10,13 @@ export default class DateInput extends Component {
   }
 
   render() {
-    const { field } = this.props;
+    const { field, ...rest } = this.props;
     return (
       <DatePicker
         selected={field.value ? moment(field.value, dateFormat) : null}
         dateFormat={dateFormat}
+        {...field}
+        {...rest}
       />
     );
   }
