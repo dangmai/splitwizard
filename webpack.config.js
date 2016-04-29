@@ -14,12 +14,12 @@ module.exports = {
   plugins: [
     new ExtractTextPlugin("main.[contenthash].css"),
     new HtmlWebpackPlugin({
-      template: "./src/index.html",
+      template: "./src/html/index.html",
       inject: "body",
       favicon: "./static/favicon.ico"
     }),
     new HtmlWebpackPlugin({
-      template: "html!./src/404.html",
+      template: "html!./src/html/404.html",
       filename: "404.html"
     })
   ],
