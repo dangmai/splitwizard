@@ -18,16 +18,23 @@ export const deserializePeople = () => {
     } catch (ex) {
       // Invalidating any weird cookies
       removeCookie();
-      return null;
+      people = null;
     }
-    if (!people.name || !people.moveInDate || !people.moveOutDate) {
-      // Deals with the old version of the cookie by simply invaliding them
+    if (!people.filter) {
       removeCookie();
-      return null;
+      people = null;
+    } else {
+      const invalidPeople = people.filter(
+        person => (!person.name || !person.moveInDate || !person.moveOutDate)
+      );
+      if (invalidPeople.length > 0) {
+        // Deals with the old version of the cookie by simply invaliding them
+        removeCookie();
+        people = null;
+      }
     }
-    return people;
   }
-  return null;
+  return people;
 };
 
 
