@@ -1,113 +1,119 @@
 @import "~react-datepicker/dist/react-datepicker.css";
-
 html {
-    font-size: 16px;
+  font-size: 16px;
 }
 
 body {
-    font-family: 'Cabin', Helvetica, Arial, sans-serif;
-    font-size: 1em;
-    line-height: 25px;
-    background-image: url('../static/grey.png');
+  font-family: 'Cabin', Helvetica, Arial, sans-serif;
+  font-size: 1em;
+  line-height: 25px;
+  background-image: url('../static/grey.png');
 }
-h1, h2, h3, h4 {
-    font-family: 'Lobster', Georgia, Times, serif;
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: 'Lobster', Georgia, Times, serif;
 }
 
 h1 {
-    font-size: 4em;
-    line-height: 1.4em;
+  font-size: 4em;
+  line-height: 1.4em;
 }
 
 label {
-    padding-top: 5px;
-    font-weight: normal;
-    font-size: 0.9em;
+  padding-top: 5px;
+  font-weight: normal;
+  font-size: 0.9em;
 }
 
 label.control-label {
-    padding-right: 0;
+  padding-right: 0;
 }
 
-.welcome, .result {
-    border-top: 1px dotted;
-    border-bottom: 1px dotted;
+.welcome,
+.result {
+  border-top: 1px dotted;
+  border-bottom: 1px dotted;
 }
 
 .welcome {
-    padding-bottom: 1em;
+  padding-bottom: 1em;
 }
 
 .result {
-    padding-top: 0.6em;
-    padding-bottom: 0.3em;
+  padding-top: 0.6em;
+  padding-bottom: 0.3em;
 }
 
 .main {
-    margin-bottom: 1em;
+  margin-bottom: 1em;
 }
 
-.person, .bill {
-    border-bottom: 1px dashed #c1c1c1;
-    padding: 1em 0;
+.person,
+.bill {
+  border-bottom: 1px dashed #c1c1c1;
+  padding: 1em 0;
 }
 
 .category-title {
-    font-family: 'Lobster', Georgia, Times, serif;
-    font-size: 2.5em;
-    padding: 0.5em 0;
+  font-family: 'Lobster', Georgia, Times, serif;
+  font-size: 2.5em;
+  padding: 0.5em 0;
 }
 
 .save-completed {
-    color: #46a546;
+  color: #46a546;
 }
 
 .result-details {
-    color: #46a546;
-    font-size: 0.9em;
+  color: #46a546;
+  font-size: 0.9em;
 }
 
 .result-details:hover {
-    text-decoration: inherit;
-    color: #387038;
+  text-decoration: inherit;
+  color: #387038;
 }
 
 .btn-remove {
-    color: red;
+  color: red;
 }
 
 .btn-icon {
-    font-size: 1.5em;
+  font-size: 1.5em;
 }
 
 .btn.btn-link.btn-block:focus {
-    outline: none;
+  outline: none;
 }
 
 .page-wrap {
-    min-height: 100%;
-    /* equal to footer height */
-    margin-bottom: -55px; 
+  min-height: 100%;
+  /* equal to footer height */
+  margin-bottom: -55px;
 }
 
 .page-wrap:after {
   content: "";
   display: block;
-  height: 142px; 
+  height: 142px;
 }
 
 footer {
-    position:fixed;
-    left: 0px;
-    bottom: 0px;
-    height: 55px;
-    width: 100%;
-    text-align: right;
-    font-size: 0.9em;
-    line-height: 1.2em;
-    padding-right: 1em;
+  position: fixed;
+  left: 0px;
+  bottom: 0px;
+  height: 55px;
+  width: 100%;
+  text-align: right;
+  font-size: 0.9em;
+  line-height: 1.2em;
+  padding-right: 1em;
 }
 
-noscript div, div.old-ie {
-    margin-top: 0.5em;
+noscript div,
+div.old-ie {
+  margin-top: 0.5em;
 }

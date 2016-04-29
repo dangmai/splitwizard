@@ -6,53 +6,55 @@
 <html>
 
 <head>
-    <meta charset="utf-8">
-    <title>Speak, Friend, and Enter</title>
-    <meta name="description" content="Split Wizard is a small app to split the bill(s) fairly in complex situation">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="//fonts.googleapis.com/css?family=Lobster|Cabin" rel="stylesheet" type="text/css">
-    <link href="apple-touch-icon.png" rel="apple-touch-icon">
+  <meta charset="utf-8">
+  <title>Speak, Friend, and Enter</title>
+  <meta name="description" content="Split Wizard is a small app to split the bill(s) fairly in complex situation">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="//fonts.googleapis.com/css?family=Lobster|Cabin" rel="stylesheet" type="text/css">
+  <link href="apple-touch-icon.png" rel="apple-touch-icon">
 </head>
 
 <body>
-    <div class="container page-wrap">
-        <div class="row">
-            <div class="col-md-12">
-                <h1 class="logo text-center">Split Wizard</h1>
-            </div>
-        </div>
-        <div id="app"></div>
-        <div class="row main text-center">
-            <div class="result hide"></div>
-            <!--[if lt IE 7]>
-                    <div class="alert old-ie">
-                        An outdated browser is detected. Don't despair! There is hope yet. <a href="http://browsehappy.com/">Upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> so the Split Wizard can best show his magic.
-                    </div>
-                <![endif]-->
-            <noscript>
-                <div class="alert alert-error">
-                    The Wizard does not have the strength to split the bills without the power of Javascript.
-                </div>
-            </noscript>
-        </div>
+  <div class="container page-wrap">
+    <div class="row">
+      <div class="col-md-12">
+        <h1 class="logo text-center">Split Wizard</h1>
+      </div>
     </div>
-    <footer>
-        © <a href="http://dangmai.net">Dang Mai</a>.
-        <br>
-        <a href="//github.com/dangmai/splitwizard/issues">Issues?</a>
-        <br>
-        <a href="//github.com/dangmai/splitwizard">Source</a>
-    </footer>
-    <script type="text/javascript">
-        var _gaq = _gaq || [];
-        _gaq.push(['_setAccount', "UA-35365849-1"]);
-        _gaq.push(['_trackPageview']);
-        (function() {
-            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-        })();
-    </script>
+    <div id="app"></div>
+    <div class="row main text-center">
+      <!--[if lt IE 7]>
+        <div class="alert old-ie">
+          An outdated browser is detected. Don't despair! There is hope yet. <a href="http://browsehappy.com/">Upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> so the Split Wizard can best show his magic.
+        </div>
+      <![endif]-->
+      <noscript>
+        <div class="alert alert-error">
+          The Wizard does not have the strength to split the bills without the power of Javascript.
+        </div>
+      </noscript>
+    </div>
+  </div>
+  <footer>
+    © <a href="http://dangmai.net">Dang Mai</a>.
+    <br>
+    <a href="//github.com/dangmai/splitwizard/issues">Issues?</a>
+    <br>
+    <a href="//github.com/dangmai/splitwizard">Source</a>
+  </footer>
+  <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', "UA-35365849-1"]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script');
+    ga.type = 'text/javascript';
+    ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(ga, s);
+  })();
+  </script>
 </body>
 
 </html>
