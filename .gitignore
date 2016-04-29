@@ -2,3 +2,4 @@ node_modules
 www-built
 tools/deploy.*
 dist
+npm-debug.log
