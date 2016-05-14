@@ -6,20 +6,7 @@ require("./main.css");
 
 import React from "react";
 import ReactDOM from "react-dom";
-
-import { Provider } from "react-redux";
-import Form from "./containers/form";
-import { store } from "./reducers/index";
-import { calculate, clearResults } from "./actions/result";
-
-const App = () => (
-  <Provider store={store}>
-    <Form
-      onSubmit={values => store.dispatch(calculate(values.bills, values.people))}
-      onSubmitFail={() => store.dispatch(clearResults())}
-    />
-  </Provider>
-);
+import { App } from "./containers/app";
 
 ReactDOM.render(
   <App />,
