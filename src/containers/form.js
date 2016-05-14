@@ -72,7 +72,7 @@ const validate = values => {
   return errors;
 };
 
-class Form extends Component {
+class PureForm extends Component {
   componentWillMount() {
     const people = deserializePeople();
     if (people) {
@@ -119,17 +119,17 @@ class Form extends Component {
   }
 }
 
-Form.propTypes = {
+PureForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   fields: PropTypes.object.isRequired,
 };
 
-Form = reduxForm(
+const Form = reduxForm(
   {
     form: formName,
     fields,
     validate,
   },
-)(Form);
+)(PureForm);
 
 export default Form;

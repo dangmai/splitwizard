@@ -5,7 +5,7 @@ import { toggleDetailedResult, completeSave } from "../actions/result";
 import { formName } from "../models";
 import { dateFormat, serializePeople } from "../utils";
 
-class Result extends Component {
+class PureResult extends Component {
   shouldComponentUpdate(nextProps) {
     return (this.props.result !== nextProps.result ||
       this.props.saveCompleted !== nextProps.saveCompleted);
@@ -72,7 +72,7 @@ const mapDispatchToProps = dispatch => ({
   completeSave: () => dispatch(completeSave()),
 });
 
-Result.propTypes = {
+PureResult.propTypes = {
   result: PropTypes.array.isRequired,
   saveCompleted: PropTypes.bool.isRequired,
   people: PropTypes.array.isRequired,
@@ -80,9 +80,9 @@ Result.propTypes = {
   completeSave: PropTypes.func.isRequired,
 };
 
-Result = connect(
+const Result = connect(
   mapStateToProps,
   mapDispatchToProps
-)(Result);
+)(PureResult);
 
 export default Result;
