@@ -12,7 +12,7 @@ MAINTAINER Dang Mai <contact@dangmai.net>
 IMPORT /dist
 COPY ./tools/docker-start.sh /
 
-RUN rm -rf /var/www/html/* \
+RUN mkdir -p /var/www/html \
     && cp -aR /dist/. /var/www/html/ \
     && rm -rf /dist
 
