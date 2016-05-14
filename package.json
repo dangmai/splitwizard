@@ -9,7 +9,8 @@
     "build": "npm install && rimraf dist && webpack --progress --colors --config webpack.config.prod.js",
     "lint": "eslint .",
     "lint-fix": "eslint . --fix",
-    "test": "karma start && npm run lint"
+    "test": "karma start && npm run lint",
+    "save-deps": "npm dedupe && npm shrinkwrap --dev"
   },
   "dependencies": {
     "babel-core": "6.8.0",
