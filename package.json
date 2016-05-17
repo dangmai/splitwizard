@@ -10,7 +10,7 @@
     "lint": "eslint .",
     "lint-fix": "eslint . --fix",
     "test": "karma start && npm run lint",
-    "save-deps": "npm dedupe && npm shrinkwrap --dev"
+    "reload-deps": "rimraf npm-shrinkwrap.json && rimraf node-modules && npm install && npm dedupe && npm shrinkwrap --dev"
   },
   "dependencies": {
     "babel-core": "6.9.0",
