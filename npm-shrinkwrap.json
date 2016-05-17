@@ -2699,9 +2699,9 @@
       }
     },
     "moment": {
-      "version": "2.12.0",
-      "from": "moment@2.12.0",
-      "resolved": "http://registry.npmjs.org/moment/-/moment-2.12.0.tgz"
+      "version": "2.13.0",
+      "from": "moment@2.13.0",
+      "resolved": "https://registry.npmjs.org/moment/-/moment-2.13.0.tgz"
     },
     "moment-range": {
       "version": "2.2.0",
@@ -3281,14 +3281,7 @@
     "react-datepicker": {
       "version": "0.27.0",
       "from": "react-datepicker@0.27.0",
-      "resolved": "https://registry.npmjs.org/react-datepicker/-/react-datepicker-0.27.0.tgz",
-      "dependencies": {
-        "moment": {
-          "version": "2.13.0",
-          "from": "moment@>=2.13.0 <3.0.0",
-          "resolved": "https://registry.npmjs.org/moment/-/moment-2.13.0.tgz"
-        }
-      }
+      "resolved": "https://registry.npmjs.org/react-datepicker/-/react-datepicker-0.27.0.tgz"
     },
     "react-dom": {
       "version": "15.0.2",
@@ -3379,9 +3372,9 @@
       }
     },
     "redux": {
-      "version": "3.4.0",
-      "from": "redux@3.4.0",
-      "resolved": "http://registry.npmjs.org/redux/-/redux-3.4.0.tgz",
+      "version": "3.5.2",
+      "from": "redux@3.5.2",
+      "resolved": "https://registry.npmjs.org/redux/-/redux-3.5.2.tgz",
       "dependencies": {
         "lodash": {
           "version": "4.12.0",
@@ -3800,9 +3793,9 @@
       "resolved": "http://registry.npmjs.org/strip-json-comments/-/strip-json-comments-1.0.4.tgz"
     },
     "style-loader": {
-      "version": "0.13.0",
-      "from": "style-loader@0.13.0",
-      "resolved": "http://registry.npmjs.org/style-loader/-/style-loader-0.13.0.tgz"
+      "version": "0.13.1",
+      "from": "style-loader@0.13.1",
+      "resolved": "https://registry.npmjs.org/style-loader/-/style-loader-0.13.1.tgz"
     },
     "supports-color": {
       "version": "2.0.0",
@@ -3818,6 +3811,11 @@
       "version": "1.1.2",
       "from": "swap-case@>=1.1.0 <2.0.0",
       "resolved": "http://registry.npmjs.org/swap-case/-/swap-case-1.1.2.tgz"
+    },
+    "symbol-observable": {
+      "version": "0.2.4",
+      "from": "symbol-observable@>=0.2.3 <0.3.0",
+      "resolved": "https://registry.npmjs.org/symbol-observable/-/symbol-observable-0.2.4.tgz"
     },
     "table": {
       "version": "3.7.8",
