@@ -13,7 +13,7 @@
     "reload-deps": "rimraf npm-shrinkwrap.json && rimraf node-modules && npm install && npm dedupe && npm shrinkwrap --dev"
   },
   "dependencies": {
-    "babel-core": "6.9.0",
+    "babel-core": "6.9.1",
     "babel-loader": "6.2.4",
     "babel-preset-es2015": "6.9.0",
     "babel-preset-react": "6.5.0",
