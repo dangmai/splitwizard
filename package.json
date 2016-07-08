@@ -43,7 +43,7 @@
     "webpack": "1.13.1"
   },
   "devDependencies": {
-    "babel-eslint": "6.1.0",
+    "babel-eslint": "6.1.1",
     "chai": "3.5.0",
     "eslint": "3.0.1",
     "eslint-config-airbnb": "9.0.1",
