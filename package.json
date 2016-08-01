@@ -33,7 +33,7 @@
     "moment-range": "2.2.0",
     "react": "15.3.0",
     "react-datepicker": "0.28.2",
-    "react-dom": "15.2.1",
+    "react-dom": "15.3.0",
     "react-redux": "4.4.5",
     "redux": "3.5.2",
     "redux-form": "5.3.1",
