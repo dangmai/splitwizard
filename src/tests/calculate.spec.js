@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import expect from "expect";
 import { calculate } from "../utils";
 import { Person, Bill } from "../models";

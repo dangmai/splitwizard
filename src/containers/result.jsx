@@ -36,7 +36,7 @@ class PureResult extends Component {
                 }
               }
             >
-              <span className="glyphicon glyphicon-plus" aria-hidden="true"></span>
+              <span className="glyphicon glyphicon-plus" aria-hidden="true" />
             </a>
             {result.detailsShown && <div>
               {result.lineItems.map((lineItem, idx) => (
@@ -54,7 +54,7 @@ class PureResult extends Component {
           <a href="#" onClick={(e) => this.handleSaveClick(e)}>Save</a>{" "}
           the Mortal Men so you don't have to enter them next time.{" "}
           {this.props.saveCompleted &&
-            <span className="save-completed glyphicon glyphicon-ok" aria-hidden="true"></span>
+            <span className="save-completed glyphicon glyphicon-ok" aria-hidden="true" />
           }
         </p>
       </div>

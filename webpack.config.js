@@ -2,12 +2,15 @@ const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
-  entry: "./src/entry.js",
+  entry: "./src/entry.jsx",
   debug: true,
   devtool: "source-map",
   output: {
     path: "dist",
     filename: "bundle.[hash].js",
+  },
+  resolve: {
+    extensions: ["", ".js", ".jsx"],
   },
   plugins: [
     new ExtractTextPlugin("main.[contenthash].css"),
@@ -24,7 +27,7 @@ module.exports = {
   module: {
     noParse: [/moment.js/],  // https://github.com/webpack/webpack/issues/198
     loaders: [{
-      test: /\.js?$/,
+      test: /\.jsx?$/,
       exclude: /node_modules/,
       loader: "babel",
       query: {

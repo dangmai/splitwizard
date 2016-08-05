@@ -1,7 +1,7 @@
 import { Person, Bill } from "../models";
 import { calculate } from "../utils";
 
-export function result(state = [], action) {
+export default function (state = [], action) {
   switch (action.type) {
     case "CALCULATE":
       return calculate(

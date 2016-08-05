@@ -1,5 +1,5 @@
 const webpack = require("webpack");
-const devConfig = require("./webpack.config.js");
+const devConfig = require("./webpack.config");
 
 devConfig.debug = false;
 devConfig.plugins = devConfig.plugins.concat([

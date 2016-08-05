@@ -1,8 +1,9 @@
-
 import moment from "moment";
+import { dateFormat } from "./utils";
+
 // https://github.com/gf3/moment-range/issues/101
 require("imports?define=>false!moment-range");
-import { dateFormat } from "./utils";
+
 
 export const formName = "appForm";
 
