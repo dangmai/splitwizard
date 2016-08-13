@@ -9,4 +9,4 @@ script:
   - export REPO="dangmai/splitwizard:latest"
   - export CONTAINER_NAME="splitwizard"
   - bash ./deploy/build.sh
-  - if [ "$BRANCH" == "master" ]; then bash ./deploy/deploy.sh -e HOST=$HOST -e EMAIL=$EMAIL; fi
+  - if [ "$BRANCH" == "master" ]; then bash ./deploy/deploy.sh -e HOST=$HOST -e EMAIL=$EMAIL -e CLOUDFLARE_EMAIL=$CLOUDFLARE_EMAIL -e CLOUDFLARE_API_KEY=$CLOUDFLARE_API_KEY; fi
