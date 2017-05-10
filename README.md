@@ -1,6 +1,8 @@
 SplitWizard [![Build Status](https://travis-ci.org/dangmai/splitwizard.png)](https://travis-ci.org/dangmai/splitwizard)
 ===========
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/dangmai/splitwizard.svg)](https://greenkeeper.io/)
+
 
 About
 -----
